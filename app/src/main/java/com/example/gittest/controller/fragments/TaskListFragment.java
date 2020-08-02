@@ -42,6 +42,11 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * @param taskName
+     * @param taskNumbers
+     * @return
+     */
     public static TaskListFragment newInstance(String taskName, int taskNumbers) {
         TaskListFragment fragment = new TaskListFragment();
         Bundle args = new Bundle();
@@ -56,24 +61,35 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mTaskName = getArguments().getString(ARG_TASK_NAME);
         mTaskNumbers = getArguments().getInt(ARG_NUMBER_OF_TASKS);
-        ;
+        TaskRepository.setTasksSize(mTaskNumbers);
         mRepository = TaskRepository.getInstance();
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         initUI(view);
         mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        updateUI();
+        setListeners();
+        return view;
+    }
+
+
+    private void initUI(View view) {
+        mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
+        mButtonAdd = view.findViewById(R.id.button_add_task);
+    }
+
+    private void updateUI() {
+        List<Task> tasks = mRepository.getList();
         if (mAdapter == null) {
-            mAdapter = new TaskAdapter(mRepository.getList());
+            mAdapter = new TaskAdapter(tasks);
             mTaskRecyclerView.setAdapter(mAdapter);
         } else
             mAdapter.notifyDataSetChanged();
-
-        setListeners();
-        return view;
     }
 
     private void setListeners() {
@@ -87,10 +103,6 @@ public class TaskListFragment extends Fragment {
 
     }
 
-    private void initUI(View view) {
-        mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
-        mButtonAdd = view.findViewById(R.id.button_add_task);
-    }
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 
@@ -122,7 +134,6 @@ public class TaskListFragment extends Fragment {
         public TaskAdapter(List<Task> tasks) {
             mTasks = tasks;
         }
-
 
         @NonNull
         @Override

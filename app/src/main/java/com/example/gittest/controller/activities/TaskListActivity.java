@@ -21,7 +21,6 @@ public class TaskListActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return TaskListFragment.newInstance(getIntent().getStringExtra(EXTRA_TASK_NAME), getIntent().getIntExtra(EXTRA_TASK_NAME, -1));
-        
+        return TaskListFragment.newInstance(getIntent().getStringExtra(EXTRA_TASK_NAME), getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1));
     }
 }

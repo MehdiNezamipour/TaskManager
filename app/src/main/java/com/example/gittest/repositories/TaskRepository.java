@@ -9,8 +9,9 @@ import java.util.UUID;
 public class TaskRepository implements IRepository<Task> {
 
     private static TaskRepository sTaskRepository;
+    private static int mTasksSize;
+
     private List<Task> mTasks;
-    private int mTasksSize;
 
 
     public static TaskRepository getInstance() {
@@ -28,19 +29,7 @@ public class TaskRepository implements IRepository<Task> {
         }
     }
 
-    public List<Task> getTasks() {
-        return mTasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        mTasks = tasks;
-    }
-
-    public int getTasksSize() {
-        return mTasksSize;
-    }
-
-    public void setTasksSize(int tasksSize) {
+    public static void setTasksSize(int tasksSize) {
         mTasksSize = tasksSize;
     }
 
