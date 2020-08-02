@@ -112,10 +112,11 @@ public class TaskListFragment extends Fragment {
 
     private void setListeners() {
         mButtonAdd.setOnClickListener(new View.OnClickListener() {
-            //TODO
             @Override
             public void onClick(View view) {
-
+                mTaskNumbers++;
+                mRepository.add(new Task());
+                updateUI();
             }
         });
 
