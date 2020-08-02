@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".controller.fragments.CreateTaskFragment"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:background="#9CF8CB45">
+
+
+    <EditText
+        android:layout_marginTop="256dp"
+        android:id="@+id/editText_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/username"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:layout_marginTop="8dp"
+        android:id="@+id/editText_number_of_tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/number_of_tasks"
+        android:inputType="numberDecimal" />
+
+    <Button
+        android:background="#9916ED1A"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="64dp"
+        android:id="@+id/button_build_tasks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/build"
+
+        />
+
+</LinearLayout>
