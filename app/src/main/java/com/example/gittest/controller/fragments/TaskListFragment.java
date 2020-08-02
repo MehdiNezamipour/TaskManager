@@ -1,9 +1,11 @@
 package com.example.gittest.controller.fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,19 +61,35 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTaskName = getArguments().getString(ARG_TASK_NAME);
-        mTaskNumbers = getArguments().getInt(ARG_NUMBER_OF_TASKS);
+        if (savedInstanceState != null) {
+            mTaskName = savedInstanceState.getString(ARG_TASK_NAME);
+            mTaskNumbers = savedInstanceState.getInt(ARG_NUMBER_OF_TASKS);
+        } else {
+            mTaskName = getArguments().getString(ARG_TASK_NAME);
+            mTaskNumbers = getArguments().getInt(ARG_NUMBER_OF_TASKS);
+        }
+
         TaskRepository.setTasksSize(mTaskNumbers);
         mRepository = TaskRepository.getInstance();
 
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ARG_NUMBER_OF_TASKS, mTaskNumbers);
+        outState.putString(ARG_TASK_NAME, mTaskName);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         initUI(view);
-        mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mTaskRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        } else if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        }
         updateUI();
         setListeners();
         return view;
