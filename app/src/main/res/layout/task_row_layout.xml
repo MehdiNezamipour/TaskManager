@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="#FFFFFF"
     android:padding="8dp">
 
     <TextView
@@ -10,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:id="@+id/textView_task_state"
@@ -21,11 +22,11 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textView_task_id"
+        android:id="@+id/textView_task_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
 
 </LinearLayout>

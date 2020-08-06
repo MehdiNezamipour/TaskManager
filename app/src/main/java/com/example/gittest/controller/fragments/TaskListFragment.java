@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskListActivity;
+import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.repositories.IRepository;
 import com.example.gittest.repositories.TaskRepository;
@@ -34,11 +35,9 @@ public class TaskListFragment extends Fragment {
 
     private IRepository<Task> mRepository;
     private RecyclerView mTaskRecyclerView;
-    private Button mButtonAdd;
     private String mTaskName;
     private int mTaskNumbers;
     private TaskAdapter mAdapter;
-
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -91,14 +90,12 @@ public class TaskListFragment extends Fragment {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
         updateUI();
-        setListeners();
         return view;
     }
 
 
     private void initUI(View view) {
         mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
-        mButtonAdd = view.findViewById(R.id.button_add_task);
     }
 
     private void updateUI() {
@@ -110,38 +107,26 @@ public class TaskListFragment extends Fragment {
             mAdapter.notifyDataSetChanged();
     }
 
-    private void setListeners() {
-        mButtonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mTaskNumbers++;
-                mRepository.add(new Task());
-                updateUI();
-            }
-        });
-
-    }
-
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 
         private Task mTask;
         private TextView mTextViewTaskName;
         private TextView mTextViewTaskState;
-        private TextView mTextViewTaskId;
+        private TextView mTextViewTaskDate;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewTaskName = itemView.findViewById(R.id.textView_task_name);
             mTextViewTaskState = itemView.findViewById(R.id.textView_task_state);
-            mTextViewTaskId = itemView.findViewById(R.id.textView_task_id);
+            mTextViewTaskDate = itemView.findViewById(R.id.textView_task_time);
         }
 
         public void bindTask(Task task) {
             mTask = task;
             mTextViewTaskName.setText(mTaskName);
             mTextViewTaskState.setText(task.getTaskState().toString());
-            mTextViewTaskId.setText(task.getTaskId().toString());
+            mTextViewTaskDate.setText(task.getDate());
         }
 
     }

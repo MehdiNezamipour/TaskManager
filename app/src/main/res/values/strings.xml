@@ -6,4 +6,8 @@
     <string name="number_of_tasks">Number of Tasks</string>
     <string name="build">Build</string>
     <string name="add">Add</string>
+    <string name="TODO">Todo</string>
+    <string name="DOING">Doing</string>
+    <string name="DONE">Done</string>
+
 </resources>

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskListActivity;
+import com.example.gittest.controller.activities.TaskPagerActivity;
 import com.example.gittest.model.Task;
 import com.example.gittest.repositories.TaskRepository;
 
@@ -57,7 +58,7 @@ public class CreateTaskFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (checkInputs()) {
-                    Intent intent = TaskListActivity.newIntent(getActivity(), mEditTextUserName.getText().toString(),
+                    Intent intent = TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString(),
                             Integer.parseInt(mEditTextNumberOfTasks.getText().toString()));
                     startActivity(intent);
                 } else
