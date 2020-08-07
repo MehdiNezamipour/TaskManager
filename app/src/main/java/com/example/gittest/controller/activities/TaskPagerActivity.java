@@ -52,11 +52,13 @@ public class TaskPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mTasksTitle = getIntent().getStringExtra(EXTRA_TASK_NAME);
+        mInitTaskNumbers = getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1);
         mTodoFragment = TaskListFragment.newInstance();
         mDoingFragment = TaskListFragment.newInstance();
         mDoneFragment = TaskListFragment.newInstance();
-        firstTasks();
+        firstTasks(mTasksTitle, mInitTaskNumbers);
+
         setContentView(R.layout.activity_task_pager);
         findViews();
         FragmentStateAdapter adapter = new TaskViewPagerAdapter(this);
@@ -80,12 +82,10 @@ public class TaskPagerActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    private void firstTasks() {
-        mTasksTitle = getIntent().getStringExtra(EXTRA_TASK_NAME);
-        mInitTaskNumbers = getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1);
-        for (int i = 0; i < mInitTaskNumbers; i++) {
+    private void firstTasks(String tasksName, int taskNumbers) {
+        for (int i = 0; i < taskNumbers; i++) {
             Task task = new Task();
-            task.setTaskTitle(mTasksTitle);
+            task.setTaskTitle(tasksName);
             mTaskRepository.add(task);
         }
         mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
@@ -107,7 +107,6 @@ public class TaskPagerActivity extends AppCompatActivity {
                 mTodoFragment.getAdapter().notifyDataSetChanged();
                 mDoingFragment.getAdapter().notifyDataSetChanged();
                 mDoneFragment.getAdapter().notifyDataSetChanged();
-
             }
         });
     }

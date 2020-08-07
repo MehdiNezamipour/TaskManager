@@ -2,6 +2,7 @@ package com.example.gittest.controller.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gittest.R;
@@ -33,7 +36,7 @@ import java.util.List;
  * Use the {@link TaskListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskListFragment extends Fragment implements Serializable {
+public class TaskListFragment extends Fragment {
 
 
     private RecyclerView mTaskRecyclerView;
@@ -114,18 +117,23 @@ public class TaskListFragment extends Fragment implements Serializable {
         private TextView mTextViewTaskName;
         private TextView mTextViewTaskState;
         private TextView mTextViewTaskDate;
+        private LinearLayout mRootLinearLayout;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewTaskName = itemView.findViewById(R.id.textView_task_name);
             mTextViewTaskState = itemView.findViewById(R.id.textView_task_state);
             mTextViewTaskDate = itemView.findViewById(R.id.textView_task_time);
+            mRootLinearLayout = itemView.findViewById(R.id.row_root_layout);
         }
 
         public void bindTask(Task task) {
             mTextViewTaskName.setText(task.getTaskTitle());
             mTextViewTaskState.setText(task.getTaskState().toString());
             mTextViewTaskDate.setText(task.getDate());
+            if (getAdapterPosition() % 2 == 0) {
+                mRootLinearLayout.setBackgroundColor(getResources().getColor(R.color.lightGreen));
+            }
         }
 
     }
