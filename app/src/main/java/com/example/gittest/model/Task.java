@@ -1,10 +1,17 @@
 package com.example.gittest.model;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.RequiresApi;
+
 import com.example.gittest.enums.State;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -14,13 +21,12 @@ public class Task implements Serializable {
     private State mTaskState;
     private Random mRandom = new Random();
     private String mDate;
-    private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat();
+    private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy / MM / dd      HH : mm   a");
 
 
     public Task() {
         mTaskId = UUID.randomUUID();
         mTaskState = setRandomState();
-        mSimpleDateFormat.applyPattern("yyyy / MM / dd - HH : mm  a");
         Date date = new Date();
         mDate = mSimpleDateFormat.format(date);
     }
@@ -49,5 +55,23 @@ public class Task implements Serializable {
 
     public String getDate() {
         return mDate;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        mTaskTitle = taskTitle;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return mTaskId.equals(task.mTaskId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(mTaskId);
     }
 }

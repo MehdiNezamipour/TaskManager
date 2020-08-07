@@ -1,5 +1,6 @@
 package com.example.gittest.repositories;
 
+import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 
 import java.util.ArrayList;
@@ -9,9 +10,11 @@ import java.util.UUID;
 public class TaskRepository implements IRepository<Task> {
 
     private static TaskRepository sTaskRepository;
-    private static int mTasksSize;
 
     private List<Task> mTasks;
+    private ArrayList<Task> mTodoTasks;
+    private ArrayList<Task> mDoingTasks;
+    private ArrayList<Task> mDoneTasks;
 
 
     public static TaskRepository getInstance() {
@@ -23,15 +26,11 @@ public class TaskRepository implements IRepository<Task> {
 
     private TaskRepository() {
         mTasks = new ArrayList<>();
-        for (int i = 0; i < mTasksSize; i++) {
-            Task task = new Task();
-            mTasks.add(task);
-        }
+        mTodoTasks = new ArrayList<>();
+        mDoingTasks = new ArrayList<>();
+        mDoneTasks = new ArrayList<>();
     }
 
-    public static void setTasksSize(int tasksSize) {
-        mTasksSize = tasksSize;
-    }
 
     @Override
     public List<Task> getList() {
@@ -49,7 +48,27 @@ public class TaskRepository implements IRepository<Task> {
 
     @Override
     public void add(Task task) {
-        mTasks.add(task);
+        if (task.getTaskState() == State.TODO)
+            mTodoTasks.add(task);
+        else if (task.getTaskState() == State.DOING)
+            mDoingTasks.add(task);
+        else
+            mDoneTasks.add(task);
     }
+
+    public ArrayList<Task> getTodoTasks() {
+        return mTodoTasks;
+    }
+
+
+    public ArrayList<Task> getDoingTasks() {
+        return mDoingTasks;
+    }
+
+
+    public ArrayList<Task> getDoneTasks() {
+        return mDoneTasks;
+    }
+
 
 }

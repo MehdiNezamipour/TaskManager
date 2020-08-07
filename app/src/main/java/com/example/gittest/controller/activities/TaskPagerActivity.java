@@ -30,17 +30,16 @@ public class TaskPagerActivity extends AppCompatActivity {
     public static final String EXTRA_TASK_NAME = "taskName";
     public static final String EXTRA_NUMBER_OF_TASKS = "numberOfTasks";
 
-    TabLayout mTabLayout;
-    FloatingActionButton mFloatingActionButton;
+    private TabLayout mTabLayout;
+    private FloatingActionButton mFloatingActionButton;
 
-    IRepository<Task> mTaskRepository = TaskRepository.getInstance();
-    ArrayList<Task> mTodoTasks = new ArrayList<>();
-    ArrayList<Task> mDoingTasks = new ArrayList<>();
-    ArrayList<Task> mDoneTasks = new ArrayList<>();
-    TaskListFragment mTodoFragment;
-    TaskListFragment mDoingFragment;
-    TaskListFragment mDoneFragment;
-    ViewPager2 mViewPager2;
+    private TaskRepository mTaskRepository = TaskRepository.getInstance();
+    private TaskListFragment mTodoFragment;
+    private TaskListFragment mDoingFragment;
+    private TaskListFragment mDoneFragment;
+    private ViewPager2 mViewPager2;
+    private String mTasksTitle;
+    private int mInitTaskNumbers;
 
 
     public static Intent newIntent(Context context, String taskName, int numberOfTasks) {
@@ -53,7 +52,11 @@ public class TaskPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        separatingTasks();
+
+        mTodoFragment = TaskListFragment.newInstance();
+        mDoingFragment = TaskListFragment.newInstance();
+        mDoneFragment = TaskListFragment.newInstance();
+        firstTasks();
         setContentView(R.layout.activity_task_pager);
         findViews();
         FragmentStateAdapter adapter = new TaskViewPagerAdapter(this);
@@ -69,31 +72,46 @@ public class TaskPagerActivity extends AppCompatActivity {
                     tab.setText(R.string.DONE);
             }
         }).attach();
+        setListeners();
+    }
 
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    private void firstTasks() {
+        mTasksTitle = getIntent().getStringExtra(EXTRA_TASK_NAME);
+        mInitTaskNumbers = getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1);
+        for (int i = 0; i < mInitTaskNumbers; i++) {
+            Task task = new Task();
+            task.setTaskTitle(mTasksTitle);
+            mTaskRepository.add(task);
+        }
+        mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
+        mDoingFragment.setTasks(mTaskRepository.getDoingTasks());
+        mDoneFragment.setTasks(mTaskRepository.getDoneTasks());
+
+    }
+
+    private void setListeners() {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTaskRepository.add(new Task());
+                Task task = new Task();
+                task.setTaskTitle(mTasksTitle);
+                mTaskRepository.add(task);
+                mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
+                mDoingFragment.setTasks(mTaskRepository.getDoingTasks());
+                mDoneFragment.setTasks(mTaskRepository.getDoneTasks());
+                mTodoFragment.getAdapter().notifyDataSetChanged();
+                mDoingFragment.getAdapter().notifyDataSetChanged();
+                mDoneFragment.getAdapter().notifyDataSetChanged();
+
             }
         });
-
     }
 
-    private void separatingTasks() {
-        for (Task task : mTaskRepository.getList()) {
-            switch (task.getTaskState()) {
-                case TODO:
-                    mTodoTasks.add(task);
-                    break;
-                case DOING:
-                    mDoingTasks.add(task);
-                    break;
-                case DONE:
-                    mDoneTasks.add(task);
-                    break;
-            }
-        }
-    }
 
     private void findViews() {
         mFloatingActionButton = findViewById(R.id.fab);
@@ -106,7 +124,6 @@ public class TaskPagerActivity extends AppCompatActivity {
         public TaskViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
-
 
         @NonNull
         @Override
@@ -124,6 +141,7 @@ public class TaskPagerActivity extends AppCompatActivity {
         public int getItemCount() {
             return 3;
         }
+
     }
 
 

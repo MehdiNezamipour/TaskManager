@@ -6,21 +6,18 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.example.gittest.controller.fragments.TaskListFragment;
+import com.example.gittest.enums.State;
 
 public class TaskListActivity extends SingleFragmentActivity {
 
-    public static final String EXTRA_TASK_NAME = "taskName";
-    public static final String EXTRA_NUMBER_OF_TASKS = "numberOfTasks";
 
-    public static Intent newIntent(Context context, String taskName, int numberOfTasks) {
+    public static Intent newIntent(Context context) {
         Intent intent = new Intent(context, TaskListActivity.class);
-        intent.putExtra(EXTRA_TASK_NAME, taskName);
-        intent.putExtra(EXTRA_NUMBER_OF_TASKS, numberOfTasks);
         return intent;
     }
 
     @Override
     protected Fragment createFragment() {
-        return TaskListFragment.newInstance(getIntent().getStringExtra(EXTRA_TASK_NAME), getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1));
+        return TaskListFragment.newInstance();
     }
 }
