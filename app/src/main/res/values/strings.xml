@@ -9,5 +9,6 @@
     <string name="TODO">Todo</string>
     <string name="DOING">Doing</string>
     <string name="DONE">Done</string>
+    <string name="your_list_is_empty">your list is empty</string>
 
 </resources>

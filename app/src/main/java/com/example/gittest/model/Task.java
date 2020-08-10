@@ -16,8 +16,11 @@ import java.util.Random;
 import java.util.UUID;
 
 public class Task implements Serializable {
+
+    private User mUser;
     private UUID mTaskId;
     private String mTaskTitle;
+    private String mTaskSubject;
     private State mTaskState;
     private Random mRandom = new Random();
     private String mDate;
@@ -60,6 +63,23 @@ public class Task implements Serializable {
     public void setTaskTitle(String taskTitle) {
         mTaskTitle = taskTitle;
     }
+
+    public User getUser() {
+        return mUser;
+    }
+
+    public void setUser(User user) {
+        mUser = user;
+    }
+
+    public String getTaskSubject() {
+        return mTaskSubject;
+    }
+
+    public void setTaskSubject(String taskSubject) {
+        mTaskSubject = taskSubject;
+    }
+
 
     @Override
     public boolean equals(Object o) {

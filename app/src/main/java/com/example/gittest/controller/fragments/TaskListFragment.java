@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mTaskRecyclerView;
     private TaskAdapter mAdapter;
     private List<Task> mTasks;
+    private ImageView mImageViewEmptyList;
+    private TextView mTextViewEmptyList;
 
     public TaskAdapter getAdapter() {
         return mAdapter;
@@ -100,9 +103,18 @@ public class TaskListFragment extends Fragment {
 
     private void initUI(View view) {
         mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
+        mImageViewEmptyList = view.findViewById(R.id.imageView_empty_list);
+        mTextViewEmptyList = view.findViewById(R.id.textView_empty_list);
     }
 
     private void updateUI() {
+        if (mTasks.size() == 0) {
+            mImageViewEmptyList.setVisibility(View.VISIBLE);
+            mTextViewEmptyList.setVisibility(View.VISIBLE);
+        } else {
+            mImageViewEmptyList.setVisibility(View.GONE);
+            mTextViewEmptyList.setVisibility(View.GONE);
+        }
         if (mAdapter == null)
             mAdapter = new TaskAdapter();
         mAdapter.setTasks(mTasks);
