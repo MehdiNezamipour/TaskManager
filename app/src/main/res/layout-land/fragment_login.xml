@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.fragments.CreateTaskFragment"
+    tools:context=".controller.fragments.LoginFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="#9CF8CB45">
 
 
     <EditText
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/editText_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
         android:background="#9916ED1A"
         android:textSize="22sp"
         android:textColor="@android:color/white"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="64dp"
         android:id="@+id/button_build_tasks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -22,46 +22,12 @@ public class Task implements Serializable {
     private String mTaskTitle;
     private String mTaskSubject;
     private State mTaskState;
-    private Random mRandom = new Random();
     private String mDate;
-    private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy / MM / dd      HH : mm   a");
+    //private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy / MM / dd      HH : mm   a");
 
 
     public Task() {
         mTaskId = UUID.randomUUID();
-        mTaskState = setRandomState();
-        Date date = new Date();
-        mDate = mSimpleDateFormat.format(date);
-    }
-
-    private State setRandomState() {
-        int random = mRandom.nextInt(3);
-        if (random == 0)
-            return State.TODO;
-        else if (random == 1)
-            return State.DOING;
-        else
-            return State.DONE;
-    }
-
-    public UUID getTaskId() {
-        return mTaskId;
-    }
-
-    public String getTaskTitle() {
-        return mTaskTitle;
-    }
-
-    public State getTaskState() {
-        return mTaskState;
-    }
-
-    public String getDate() {
-        return mDate;
-    }
-
-    public void setTaskTitle(String taskTitle) {
-        mTaskTitle = taskTitle;
     }
 
     public User getUser() {
@@ -72,6 +38,19 @@ public class Task implements Serializable {
         mUser = user;
     }
 
+    public UUID getTaskId() {
+        return mTaskId;
+    }
+
+
+    public String getTaskTitle() {
+        return mTaskTitle;
+    }
+
+    public void setTaskTitle(String taskTitle) {
+        mTaskTitle = taskTitle;
+    }
+
     public String getTaskSubject() {
         return mTaskSubject;
     }
@@ -80,6 +59,21 @@ public class Task implements Serializable {
         mTaskSubject = taskSubject;
     }
 
+    public State getTaskState() {
+        return mTaskState;
+    }
+
+    public void setTaskState(State taskState) {
+        mTaskState = taskState;
+    }
+
+    public String getDate() {
+        return mDate;
+    }
+
+    public void setDate(String date) {
+        mDate = date;
+    }
 
     @Override
     public boolean equals(Object o) {

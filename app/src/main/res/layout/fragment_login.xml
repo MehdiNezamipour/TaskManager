@@ -3,40 +3,49 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.fragments.CreateTaskFragment"
+    tools:context=".controller.fragments.LoginFragment"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:background="#9CF8CB45">
 
+    >
 
     <EditText
-        android:layout_marginTop="50dp"
         android:id="@+id/editText_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:layout_marginTop="72dp"
         android:hint="@string/username"
         android:inputType="textPersonName" />
 
     <EditText
-        android:layout_marginTop="8dp"
-        android:id="@+id/editText_number_of_tasks"
+        android:id="@+id/editText_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="@string/number_of_tasks"
-        android:inputType="numberDecimal" />
+        android:hint="@string/password"
+        android:inputType="textPassword" />
 
     <Button
-        android:background="#9916ED1A"
+        android:id="@+id/button_login"
         android:textSize="22sp"
+        android:layout_marginTop="50dp"
         android:textColor="@android:color/white"
-        android:layout_marginTop="64dp"
-        android:id="@+id/button_build_tasks"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
-        android:text="@string/build"
+        android:text="@string/login"
+        />
+
+    <Button
+        android:id="@+id/button_signUp"
+        android:textSize="22sp"
+        android:textColor="@android:color/white"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="@string/sign_up"
 
         />
 

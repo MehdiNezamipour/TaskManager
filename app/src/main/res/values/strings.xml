@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Git Test</string>
+    <string name="app_name">Task Manager</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="username">UserName</string>
@@ -10,5 +10,9 @@
     <string name="DOING">Doing</string>
     <string name="DONE">Done</string>
     <string name="your_list_is_empty">your list is empty</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="sign_up">sign up</string>
+    <string name="repeat_password">Repeat Password</string>
 
 </resources>

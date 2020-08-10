@@ -14,50 +14,39 @@ import android.view.View;
 
 import com.example.gittest.R;
 import com.example.gittest.controller.fragments.TaskListFragment;
-import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
-import com.example.gittest.repositories.IRepository;
 import com.example.gittest.repositories.TaskRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class TaskPagerActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TASK_NAME = "taskName";
-    public static final String EXTRA_NUMBER_OF_TASKS = "numberOfTasks";
+    public static final String EXTRA_USERNAME = "userName";
 
     private TabLayout mTabLayout;
     private FloatingActionButton mFloatingActionButton;
-
     private TaskRepository mTaskRepository = TaskRepository.getInstance();
     private TaskListFragment mTodoFragment;
     private TaskListFragment mDoingFragment;
     private TaskListFragment mDoneFragment;
     private ViewPager2 mViewPager2;
-    private String mTasksTitle;
-    private int mInitTaskNumbers;
+    private String mUserName;
 
 
-    public static Intent newIntent(Context context, String taskName, int numberOfTasks) {
+    public static Intent newIntent(Context context, String taskName) {
         Intent intent = new Intent(context, TaskPagerActivity.class);
-        intent.putExtra(EXTRA_TASK_NAME, taskName);
-        intent.putExtra(EXTRA_NUMBER_OF_TASKS, numberOfTasks);
+        intent.putExtra(EXTRA_USERNAME, taskName);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTasksTitle = getIntent().getStringExtra(EXTRA_TASK_NAME);
-        mInitTaskNumbers = getIntent().getIntExtra(EXTRA_NUMBER_OF_TASKS, -1);
+        mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
         mTodoFragment = TaskListFragment.newInstance();
         mDoingFragment = TaskListFragment.newInstance();
         mDoneFragment = TaskListFragment.newInstance();
-        firstTasks(mTasksTitle, mInitTaskNumbers);
 
         setContentView(R.layout.activity_task_pager);
         findViews();
@@ -82,24 +71,12 @@ public class TaskPagerActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    private void firstTasks(String tasksName, int taskNumbers) {
-        for (int i = 0; i < taskNumbers; i++) {
-            Task task = new Task();
-            task.setTaskTitle(tasksName);
-            mTaskRepository.add(task);
-        }
-        mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
-        mDoingFragment.setTasks(mTaskRepository.getDoingTasks());
-        mDoneFragment.setTasks(mTaskRepository.getDoneTasks());
-
-    }
 
     private void setListeners() {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Task task = new Task();
-                task.setTaskTitle(mTasksTitle);
                 mTaskRepository.add(task);
                 mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
                 mDoingFragment.setTasks(mTaskRepository.getDoingTasks());

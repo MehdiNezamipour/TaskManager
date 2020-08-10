@@ -30,6 +30,7 @@ import com.example.gittest.repositories.IRepository;
 import com.example.gittest.repositories.TaskRepository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,6 +69,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mTasks = new ArrayList<>();
     }
 
     @Override

@@ -31,6 +31,20 @@ public class TaskRepository implements IRepository<Task> {
         mDoneTasks = new ArrayList<>();
     }
 
+    public ArrayList<Task> getTodoTasks() {
+        return mTodoTasks;
+    }
+
+
+    public ArrayList<Task> getDoingTasks() {
+        return mDoingTasks;
+    }
+
+
+    public ArrayList<Task> getDoneTasks() {
+        return mDoneTasks;
+    }
+
 
     @Override
     public List<Task> getList() {
@@ -56,20 +70,19 @@ public class TaskRepository implements IRepository<Task> {
             mDoneTasks.add(task);
     }
 
-    public ArrayList<Task> getTodoTasks() {
-        return mTodoTasks;
+    @Override
+    public void remove(Task task) {
+        mTasks.remove(task);
     }
 
-
-    public ArrayList<Task> getDoingTasks() {
-        return mDoingTasks;
+    @Override
+    public void update(Task task) {
+        Task oldTask = get(task.getTaskId());
+        oldTask.setTaskTitle(task.getTaskTitle());
+        oldTask.setDate(task.getDate());
+        oldTask.setTaskState(task.getTaskState());
+        oldTask.setTaskSubject(task.getTaskSubject());
     }
-
-
-    public ArrayList<Task> getDoneTasks() {
-        return mDoneTasks;
-    }
-
 
 
 }
