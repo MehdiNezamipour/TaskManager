@@ -13,9 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.example.gittest.R;
+import com.example.gittest.controller.fragments.AddTaskDialogFragment;
+import com.example.gittest.controller.fragments.EditTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.model.Task;
+import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskRepository;
+import com.example.gittest.repositories.UserRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -23,15 +27,17 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class TaskPagerActivity extends AppCompatActivity {
 
     public static final String EXTRA_USERNAME = "userName";
+    public static final String ADD_TASK_DIALOG_FRAGMENT_TAG = "AddTaskDialogFragment";
 
     private TabLayout mTabLayout;
     private FloatingActionButton mFloatingActionButton;
-    private TaskRepository mTaskRepository = TaskRepository.getInstance();
     private TaskListFragment mTodoFragment;
     private TaskListFragment mDoingFragment;
     private TaskListFragment mDoneFragment;
     private ViewPager2 mViewPager2;
+    private UserRepository mUserRepository;
     private String mUserName;
+    private User mUser;
 
 
     public static Intent newIntent(Context context, String taskName) {
@@ -43,10 +49,12 @@ public class TaskPagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
+        mUserRepository = UserRepository.getInstance();
         mTodoFragment = TaskListFragment.newInstance();
         mDoingFragment = TaskListFragment.newInstance();
         mDoneFragment = TaskListFragment.newInstance();
+        mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
+        mUser = mUserRepository.get(mUserName);
 
         setContentView(R.layout.activity_task_pager);
         findViews();
@@ -76,14 +84,17 @@ public class TaskPagerActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Task task = new Task();
-                mTaskRepository.add(task);
-                mTodoFragment.setTasks(mTaskRepository.getTodoTasks());
-                mDoingFragment.setTasks(mTaskRepository.getDoingTasks());
-                mDoneFragment.setTasks(mTaskRepository.getDoneTasks());
+
+                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
+                addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
+
+               /* mTodoFragment.setTasks(mUser.getTaskRepository().getTodoTasks());
+                mDoingFragment.setTasks(mUser.getTaskRepository().getDoingTasks());
+                mDoneFragment.setTasks(mUser.getTaskRepository().getDoneTasks());
+
                 mTodoFragment.getAdapter().notifyDataSetChanged();
                 mDoingFragment.getAdapter().notifyDataSetChanged();
-                mDoneFragment.getAdapter().notifyDataSetChanged();
+                mDoneFragment.getAdapter().notifyDataSetChanged();*/
             }
         });
     }

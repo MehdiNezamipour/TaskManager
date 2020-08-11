@@ -14,5 +14,10 @@
     <string name="login">Login</string>
     <string name="sign_up">sign up</string>
     <string name="repeat_password">Repeat Password</string>
+    <string name="subject">Subject</string>
+    <string name="title">Title</string>
+    <string name="addingTask">Add Task</string>
+    <string name="selectDate">Select Date</string>
+    <string name="selectTime">Select Time</string>
 
 </resources>

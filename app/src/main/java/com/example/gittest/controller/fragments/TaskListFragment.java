@@ -1,8 +1,6 @@
 package com.example.gittest.controller.fragments;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,24 +10,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.renderscript.Sampler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.gittest.R;
-import com.example.gittest.controller.activities.TaskListActivity;
-import com.example.gittest.controller.activities.TaskPagerActivity;
-import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
-import com.example.gittest.repositories.IRepository;
-import com.example.gittest.repositories.TaskRepository;
+import com.google.android.material.card.MaterialCardView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,26 +119,32 @@ public class TaskListFragment extends Fragment {
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTextViewTaskName;
-        private TextView mTextViewTaskState;
+        private TextView mTextViewTaskTitle;
+        private TextView mTextViewTaskSubject;
         private TextView mTextViewTaskDate;
-        private LinearLayout mRootLinearLayout;
+        private MaterialCardView mMaterialCardView;
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
-            mTextViewTaskName = itemView.findViewById(R.id.textView_task_name);
-            mTextViewTaskState = itemView.findViewById(R.id.textView_task_state);
-            mTextViewTaskDate = itemView.findViewById(R.id.textView_task_time);
-            mRootLinearLayout = itemView.findViewById(R.id.row_root_layout);
+            mMaterialCardView = itemView.findViewById(R.id.card_container);
+            mTextViewTaskTitle = itemView.findViewById(R.id.textView_task_title);
+            mTextViewTaskSubject = itemView.findViewById(R.id.textView_task_subject);
+            mTextViewTaskDate = itemView.findViewById(R.id.textView_task_date);
         }
 
         public void bindTask(Task task) {
-            mTextViewTaskName.setText(task.getTaskTitle());
-            mTextViewTaskState.setText(task.getTaskState().toString());
+            mTextViewTaskTitle.setText(task.getTaskTitle());
+            mTextViewTaskSubject.setText(task.getTaskState().toString());
             mTextViewTaskDate.setText(task.getDate());
-            if (getAdapterPosition() % 2 == 0) {
-                mRootLinearLayout.setBackgroundColor(getResources().getColor(R.color.lightGreen));
-            }
+            /*if (getAdapterPosition() % 2 == 0) {
+                mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
+            }*/
+            mMaterialCardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO write code for open edit task dialog
+                }
+            });
         }
 
     }

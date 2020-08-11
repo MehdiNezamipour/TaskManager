@@ -17,25 +17,16 @@ import java.util.UUID;
 
 public class Task implements Serializable {
 
-    private User mUser;
     private UUID mTaskId;
     private String mTaskTitle;
     private String mTaskSubject;
     private State mTaskState;
     private String mDate;
-    //private SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat("yyyy / MM / dd      HH : mm   a");
+    private String mTime;
 
 
     public Task() {
         mTaskId = UUID.randomUUID();
-    }
-
-    public User getUser() {
-        return mUser;
-    }
-
-    public void setUser(User user) {
-        mUser = user;
     }
 
     public UUID getTaskId() {
@@ -73,6 +64,14 @@ public class Task implements Serializable {
 
     public void setDate(String date) {
         mDate = date;
+    }
+
+    public String getTime() {
+        return mTime;
+    }
+
+    public void setTime(String time) {
+        mTime = time;
     }
 
     @Override

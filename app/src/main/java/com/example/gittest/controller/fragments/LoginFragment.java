@@ -86,7 +86,6 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SignUpDialogFragment signUpDialogFragment = SignUpDialogFragment.newInstance();
-                signUpDialogFragment.setTargetFragment(LoginFragment.this, REQUEST_CODE_SIGNUP_FRAGMENT);
                 signUpDialogFragment.show(getFragmentManager(), SIGN_UP_DIALOG_FRAGMENT_TAG);
             }
         });

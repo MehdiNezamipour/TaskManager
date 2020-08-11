@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class TaskRepository implements IRepository<Task> {
 
-    private static TaskRepository sTaskRepository;
 
     private List<Task> mTasks;
     private ArrayList<Task> mTodoTasks;
@@ -17,14 +16,7 @@ public class TaskRepository implements IRepository<Task> {
     private ArrayList<Task> mDoneTasks;
 
 
-    public static TaskRepository getInstance() {
-        if (sTaskRepository == null) {
-            sTaskRepository = new TaskRepository();
-        }
-        return sTaskRepository;
-    }
-
-    private TaskRepository() {
+    public TaskRepository() {
         mTasks = new ArrayList<>();
         mTodoTasks = new ArrayList<>();
         mDoingTasks = new ArrayList<>();

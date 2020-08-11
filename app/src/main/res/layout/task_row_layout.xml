@@ -1,33 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/row_root_layout"
+<com.google.android.material.card.MaterialCardView
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
-    android:padding="8dp">
+    android:layout_margin="12dp"
+    android:padding="8dp"
+    app:cardCornerRadius="16dp"
+    tools:context="com.example.gittest.controller.fragments.AddTaskDialogFragment">
 
-    <TextView
-        android:id="@+id/textView_task_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
-        android:textSize="22sp" />
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:padding="8dp">
 
-    <TextView
-        android:id="@+id/textView_task_state"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/textView_task_title"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
 
-    <TextView
-        android:id="@+id/textView_task_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="16sp" />
+        <TextView
+            android:id="@+id/textView_task_subject"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:text="@string/hello_blank_fragment"
+            android:textSize="16sp"
 
-</LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_task_title"
+            tools:text="subject of task" />
+
+        <TextView
+            android:id="@+id/textView_task_date"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:text="@string/hello_blank_fragment"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView_task_subject"
+            tools:text="date and time "
+
+            />
+
+        <TextView
+            android:id="@+id/textView_task_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

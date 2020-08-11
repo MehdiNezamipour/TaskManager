@@ -21,7 +21,7 @@ public class EditTaskDialogFragment extends Fragment {
     public EditTaskDialogFragment() {
         // Required empty public constructor
     }
-    public static EditTaskDialogFragment newInstance(String param1, String param2) {
+    public static EditTaskDialogFragment newInstance() {
         EditTaskDialogFragment fragment = new EditTaskDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
