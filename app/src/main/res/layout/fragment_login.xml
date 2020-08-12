@@ -30,7 +30,7 @@
     <Button
         android:id="@+id/button_login"
         android:textSize="22sp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="120dp"
         android:textColor="@android:color/white"
         android:layout_width="150dp"
         android:layout_height="wrap_content"

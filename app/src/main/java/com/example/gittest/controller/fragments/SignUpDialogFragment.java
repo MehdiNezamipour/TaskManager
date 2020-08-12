@@ -63,13 +63,16 @@ public class SignUpDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, null);
         findViews(view);
 
+        //init ui for fast test
+        initUi();
+
         return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.sign_up)
                 .setView(view)
                 .setPositiveButton(R.string.sign_up, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (checkInputs()) {
+                        if (true) {
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString());
                             mUserRepository.add(user);
                             Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_SHORT).show();
@@ -80,6 +83,12 @@ public class SignUpDialogFragment extends DialogFragment {
                 .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
+    }
+
+    private void initUi() {
+        mEditTextUserName.setText("a");
+        mEditTextPassword.setText("1");
+        mEditTextRepeatPassword.setText("1");
     }
 
     private boolean checkInputs() {

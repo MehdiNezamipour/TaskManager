@@ -87,4 +87,15 @@ public class Task implements Serializable {
     public int hashCode() {
         return Objects.hash(mTaskId);
     }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "mTaskTitle='" + mTaskTitle + '\'' +
+                ", mTaskSubject='" + mTaskSubject + '\'' +
+                ", mTaskState=" + mTaskState +
+                ", mDate='" + mDate + '\'' +
+                ", mTime='" + mTime + '\'' +
+                '}';
+    }
 }

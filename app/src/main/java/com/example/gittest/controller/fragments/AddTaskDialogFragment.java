@@ -2,9 +2,11 @@ package com.example.gittest.controller.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +32,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
  */
 public class AddTaskDialogFragment extends DialogFragment {
 
-
     public static final String ARG_USER_NAME = "userName";
     public static final String DATE_PICKER_DIALOG_FRAGMENT_TAG = "datePickerDialogFragment";
     public static final int REQUEST_CODE_DATE_PICKER = 2;
@@ -43,6 +44,12 @@ public class AddTaskDialogFragment extends DialogFragment {
     private RadioGroup mRadioGroupTaskState;
     private UserRepository mUserRepository;
     private User mUser;
+    private OnAddDialogDismissListener mListener;
+    private Task mTask;
+
+    public interface OnAddDialogDismissListener {
+        void onDismiss(State state);
+    }
 
     public AddTaskDialogFragment() {
         // Required empty public constructor
@@ -59,8 +66,20 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserRepository = UserRepository.getInstance();
         if (getArguments() != null) {
             mUser = mUserRepository.get(getArguments().getString(ARG_USER_NAME));
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d("ATF", "onAttach");
+        try {
+            mListener = (OnAddDialogDismissListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnAddDialogDismissListener");
         }
     }
 
@@ -91,25 +110,26 @@ public class AddTaskDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Task task = new Task();
-                        task.setTaskTitle(mEditTextTaskTitle.getText().toString());
-                        task.setTaskSubject(mEditTextTaskSubject.getText().toString());
-                        task.setDate(mButtonDatePicker.getText().toString());
-                        task.setTime(mButtonTimePicker.getText().toString());
+                        mTask = new Task();
+                        mTask.setTaskTitle(mEditTextTaskTitle.getText().toString());
+                        mTask.setTaskSubject(mEditTextTaskSubject.getText().toString());
+                        mTask.setDate(mButtonDatePicker.getText().toString());
+                        mTask.setTime(mButtonTimePicker.getText().toString());
                         switch (mRadioGroupTaskState.getCheckedRadioButtonId()) {
                             case R.id.radioButton_task_todo:
-                                task.setTaskState(State.TODO);
+                                mTask.setTaskState(State.TODO);
                                 break;
                             case R.id.radioButton_task_doing:
-                                task.setTaskState(State.DOING);
+                                mTask.setTaskState(State.DOING);
                                 break;
                             case R.id.radioButton_task_done:
-                                task.setTaskState(State.DONE);
+                                mTask.setTaskState(State.DONE);
                                 break;
                             default:
                                 break;
                         }
-                        mUser.getTaskRepository().add(task);
+                        mUser.getTaskRepository().add(mTask);
+                        mListener.onDismiss(mTask.getTaskState());
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)

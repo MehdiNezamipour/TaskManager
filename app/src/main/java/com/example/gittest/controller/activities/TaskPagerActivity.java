@@ -1,5 +1,11 @@
 package com.example.gittest.controller.activities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -7,24 +13,17 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
 import com.example.gittest.R;
 import com.example.gittest.controller.fragments.AddTaskDialogFragment;
-import com.example.gittest.controller.fragments.EditTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
-import com.example.gittest.model.Task;
+import com.example.gittest.enums.State;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
 import com.example.gittest.repositories.UserRepository;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class TaskPagerActivity extends AppCompatActivity {
+public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialogFragment.OnAddDialogDismissListener {
 
     public static final String EXTRA_USERNAME = "userName";
     public static final String ADD_TASK_DIALOG_FRAGMENT_TAG = "AddTaskDialogFragment";
@@ -40,21 +39,26 @@ public class TaskPagerActivity extends AppCompatActivity {
     private User mUser;
 
 
-    public static Intent newIntent(Context context, String taskName) {
+    public static Intent newIntent(Context context, String userName) {
         Intent intent = new Intent(context, TaskPagerActivity.class);
-        intent.putExtra(EXTRA_USERNAME, taskName);
+        intent.putExtra(EXTRA_USERNAME, userName);
         return intent;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
         mUserRepository = UserRepository.getInstance();
+        mUser = mUserRepository.get(mUserName);
+
         mTodoFragment = TaskListFragment.newInstance();
         mDoingFragment = TaskListFragment.newInstance();
         mDoneFragment = TaskListFragment.newInstance();
-        mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
-        mUser = mUserRepository.get(mUserName);
+        mTodoFragment.setTasks(mUser.getTaskRepository().getTodoTasks());
+        mDoingFragment.setTasks(mUser.getTaskRepository().getDoingTasks());
+        mDoneFragment.setTasks(mUser.getTaskRepository().getDoneTasks());
+
 
         setContentView(R.layout.activity_task_pager);
         findViews();
@@ -79,22 +83,27 @@ public class TaskPagerActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("TPA", "onResume");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("TPA", "onPause");
+    }
+
 
     private void setListeners() {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
                 addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
 
-               /* mTodoFragment.setTasks(mUser.getTaskRepository().getTodoTasks());
-                mDoingFragment.setTasks(mUser.getTaskRepository().getDoingTasks());
-                mDoneFragment.setTasks(mUser.getTaskRepository().getDoneTasks());
-
-                mTodoFragment.getAdapter().notifyDataSetChanged();
-                mDoingFragment.getAdapter().notifyDataSetChanged();
-                mDoneFragment.getAdapter().notifyDataSetChanged();*/
             }
         });
     }
@@ -105,6 +114,33 @@ public class TaskPagerActivity extends AppCompatActivity {
         mViewPager2 = findViewById(R.id.viewPager2);
         mTabLayout = findViewById(R.id.tabLayout);
     }
+
+    @Override
+    public void onDismiss(State state) {
+        switch (state) {
+            case TODO:
+                if (mTodoFragment.getAdapter() != null) {
+                    mTodoFragment.getAdapter().setTasks(mUser.getTaskRepository().getTodoTasks());
+                    mTodoFragment.getAdapter().notifyDataSetChanged();
+                }
+                break;
+            case DOING:
+                if (mDoingFragment.getAdapter() != null) {
+                    mDoingFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoingTasks());
+                    mDoingFragment.getAdapter().notifyDataSetChanged();
+                }
+                break;
+            case DONE:
+                if (mDoneFragment.getAdapter() != null) {
+                    mDoneFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoneTasks());
+                    mDoneFragment.getAdapter().notifyDataSetChanged();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
 
     public class TaskViewPagerAdapter extends FragmentStateAdapter {
 

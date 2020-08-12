@@ -69,6 +69,14 @@ public class LoginFragment extends Fragment {
         findViews(view);
         setListeners();
 
+        //init ui for fast test app
+        initUi();
+
+    }
+
+    private void initUi() {
+        mEditTextUserName.setText("a");
+        mEditTextPassword.setText("1");
     }
 
     private void setListeners() {

@@ -34,7 +34,7 @@ public class TaskListFragment extends Fragment {
 
     private RecyclerView mTaskRecyclerView;
     private TaskAdapter mAdapter;
-    private List<Task> mTasks;
+    private List<Task> mTasks = new ArrayList<>();
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
 
@@ -60,7 +60,7 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTasks = new ArrayList<>();
+
     }
 
     @Override
@@ -79,15 +79,19 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mTaskRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-        updateUI();
+        if (mAdapter == null) {
+            mAdapter = new TaskAdapter();
+            mTaskRecyclerView.setAdapter(mAdapter);
+        }
+        mAdapter.setTasks(mTasks);
+        mTaskRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onResume() {
@@ -101,18 +105,15 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateUI() {
+
+        /*
         if (mTasks.size() == 0) {
             mImageViewEmptyList.setVisibility(View.VISIBLE);
             mTextViewEmptyList.setVisibility(View.VISIBLE);
         } else {
             mImageViewEmptyList.setVisibility(View.GONE);
             mTextViewEmptyList.setVisibility(View.GONE);
-        }
-        if (mAdapter == null)
-            mAdapter = new TaskAdapter();
-        mAdapter.setTasks(mTasks);
-        mTaskRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        }*/
 
     }
 
@@ -122,6 +123,7 @@ public class TaskListFragment extends Fragment {
         private TextView mTextViewTaskTitle;
         private TextView mTextViewTaskSubject;
         private TextView mTextViewTaskDate;
+        private TextView mTextViewTaskIcon;
         private MaterialCardView mMaterialCardView;
 
         public TaskHolder(@NonNull View itemView) {
@@ -130,12 +132,13 @@ public class TaskListFragment extends Fragment {
             mTextViewTaskTitle = itemView.findViewById(R.id.textView_task_title);
             mTextViewTaskSubject = itemView.findViewById(R.id.textView_task_subject);
             mTextViewTaskDate = itemView.findViewById(R.id.textView_task_date);
+            mTextViewTaskIcon = itemView.findViewById(R.id.textView_task_icon);
         }
 
         public void bindTask(Task task) {
             mTextViewTaskTitle.setText(task.getTaskTitle());
-            mTextViewTaskSubject.setText(task.getTaskState().toString());
-            mTextViewTaskDate.setText(task.getDate());
+            mTextViewTaskSubject.setText(task.getTaskSubject());
+            mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
             /*if (getAdapterPosition() % 2 == 0) {
                 mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
             }*/
