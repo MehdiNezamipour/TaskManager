@@ -1,9 +1,13 @@
 package com.example.gittest.controller.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,7 @@ import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.UserRepository;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -87,16 +92,35 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d("TPA", "onResume");
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.pager_activity_menu, menu);
+        return true;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d("TPA", "onPause");
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout_menu_item:
+                finish();
+                return true;
+            case R.id.remove_all_task_menu_item:
+                new MaterialAlertDialogBuilder(this)
+                        .setMessage(R.string.sureAlertMessage)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                mUser.getTaskRepository().removeAllTasks();
+                                notifyAllAdapter();
+                            }
+                        })
+                        .setNeutralButton(android.R.string.cancel, null)
+                        .create()
+                        .show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 
@@ -141,6 +165,22 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                 break;
             default:
                 break;
+        }
+    }
+
+    private void notifyAllAdapter() {
+        if (mTodoFragment.getAdapter() != null) {
+            mTodoFragment.getAdapter().setTasks(mUser.getTaskRepository().getTodoTasks());
+            mTodoFragment.getAdapter().notifyDataSetChanged();
+        }
+
+        if (mDoingFragment.getAdapter() != null) {
+            mDoingFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoingTasks());
+            mDoingFragment.getAdapter().notifyDataSetChanged();
+        }
+        if (mDoneFragment.getAdapter() != null) {
+            mDoneFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoneTasks());
+            mDoneFragment.getAdapter().notifyDataSetChanged();
         }
     }
 

@@ -38,6 +38,13 @@ public class TaskRepository implements IRepository<Task> {
     }
 
 
+    public void removeAllTasks() {
+        mTasks.clear();
+        mTodoTasks.clear();
+        mDoingTasks.clear();
+        mDoneTasks.clear();
+    }
+
     @Override
     public List<Task> getList() {
         return mTasks;

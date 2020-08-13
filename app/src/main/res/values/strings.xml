@@ -23,5 +23,10 @@
     <string name="save">save</string>
     <string name="edit">edit</string>
     <string name="remove">remove</string>
+    <string name="remove_all">remove all</string>
+    <string name="logout">logout</string>
+    <string name="yes">yes</string>
+    <string name="sureAlertMessage">Are you sure to remove all tasks ?</string>
+
 
 </resources>
