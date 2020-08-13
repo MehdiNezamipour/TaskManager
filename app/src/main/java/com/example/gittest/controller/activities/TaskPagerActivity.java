@@ -23,10 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialogFragment.OnAddDialogDismissListener {
+import java.util.UUID;
+
+public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialogFragment.OnAddDialogDismissListener, TaskListFragment.OnTaskClickListener {
 
     public static final String EXTRA_USERNAME = "userName";
     public static final String ADD_TASK_DIALOG_FRAGMENT_TAG = "AddTaskDialogFragment";
+    public static final String EDIT_TASK_DIALOG_FRAGMENT_TAG = "editTaskDialogFragment";
 
     private TabLayout mTabLayout;
     private FloatingActionButton mFloatingActionButton;
@@ -101,7 +104,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
+                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName, "float");
                 addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
 
             }
@@ -139,6 +142,12 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onTaskClick() {
+        AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName, "task");
+        addTaskDialogFragment.show(getSupportFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
     }
 
 

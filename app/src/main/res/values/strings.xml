@@ -19,5 +19,9 @@
     <string name="addingTask">Add Task</string>
     <string name="selectDate">Select Date</string>
     <string name="selectTime">Select Time</string>
+    <string name="editTask">Edit or Remove</string>
+    <string name="save">save</string>
+    <string name="edit">edit</string>
+    <string name="remove">remove</string>
 
 </resources>

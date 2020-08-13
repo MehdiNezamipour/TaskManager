@@ -54,6 +54,7 @@ public class TaskRepository implements IRepository<Task> {
 
     @Override
     public void add(Task task) {
+        mTasks.add(task);
         if (task.getTaskState() == State.TODO)
             mTodoTasks.add(task);
         else if (task.getTaskState() == State.DOING)
@@ -65,6 +66,12 @@ public class TaskRepository implements IRepository<Task> {
     @Override
     public void remove(Task task) {
         mTasks.remove(task);
+        if (task.getTaskState() == State.TODO)
+            mTodoTasks.remove(task);
+        else if (task.getTaskState() == State.DOING)
+            mDoingTasks.remove(task);
+        else
+            mDoneTasks.remove(task);
     }
 
     @Override
@@ -72,6 +79,7 @@ public class TaskRepository implements IRepository<Task> {
         Task oldTask = get(task.getTaskId());
         oldTask.setTaskTitle(task.getTaskTitle());
         oldTask.setDate(task.getDate());
+        oldTask.setTime(task.getTime());
         oldTask.setTaskState(task.getTaskState());
         oldTask.setTaskSubject(task.getTaskSubject());
     }

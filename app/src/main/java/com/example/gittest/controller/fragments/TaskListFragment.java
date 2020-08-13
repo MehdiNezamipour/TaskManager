@@ -1,5 +1,6 @@
 package com.example.gittest.controller.fragments;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +40,12 @@ public class TaskListFragment extends Fragment {
     private List<Task> mTasks = new ArrayList<>();
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
+    private OnTaskClickListener mListener;
+
+    public interface OnTaskClickListener {
+        void onTaskClick();
+    }
+
 
     public TaskAdapter getAdapter() {
         return mAdapter;
@@ -94,8 +103,13 @@ public class TaskListFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (TaskListFragment.OnTaskClickListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement OnTaskClickListener");
+        }
     }
 
     private void initUI(View view) {
@@ -145,7 +159,8 @@ public class TaskListFragment extends Fragment {
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO write code for open edit task dialog
+                    mListener.onTaskClick();
+                    task.setEditable(true);
                 }
             });
         }

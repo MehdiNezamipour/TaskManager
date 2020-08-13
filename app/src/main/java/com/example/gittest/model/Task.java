@@ -23,6 +23,7 @@ public class Task implements Serializable {
     private State mTaskState;
     private String mDate;
     private String mTime;
+    private boolean mEditable;
 
 
     public Task() {
@@ -72,6 +73,14 @@ public class Task implements Serializable {
 
     public void setTime(String time) {
         mTime = time;
+    }
+
+    public boolean getEditable() {
+        return mEditable;
+    }
+
+    public void setEditable(boolean editable) {
+        mEditable = editable;
     }
 
     @Override
