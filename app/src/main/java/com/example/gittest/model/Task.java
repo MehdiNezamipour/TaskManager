@@ -24,10 +24,13 @@ public class Task implements Serializable {
     private String mDate;
     private String mTime;
     private boolean mEditable;
+    private UUID mUserId;
 
 
-    public Task() {
+    public Task(User user) {
+        mUserId = user.getId();
         mTaskId = UUID.randomUUID();
+
     }
 
     public UUID getTaskId() {
@@ -81,6 +84,14 @@ public class Task implements Serializable {
 
     public void setEditable(boolean editable) {
         mEditable = editable;
+    }
+
+    public UUID getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(UUID userId) {
+        mUserId = userId;
     }
 
     @Override

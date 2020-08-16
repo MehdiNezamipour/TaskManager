@@ -3,6 +3,8 @@ package com.example.gittest.model;
 import com.example.gittest.repositories.TaskRepository;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -11,10 +13,10 @@ public class User implements Serializable {
     private String mUserName;
     private String mPassword;
     private UUID mId;
-    private TaskRepository mTaskRepository;
+    //private List<Task> mTasks;
 
     public User(String userName, String password) {
-        mTaskRepository = new TaskRepository();
+        //mTasks = new ArrayList<>();
         mUserName = userName;
         mPassword = password;
         mId = UUID.randomUUID();
@@ -36,9 +38,25 @@ public class User implements Serializable {
         return mPassword;
     }
 
-    public TaskRepository getTaskRepository() {
-        return mTaskRepository;
+
+    /*public List<Task> getTasks() {
+        return mTasks;
     }
+
+    public void setTasks(List<Task> tasks) {
+        mTasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        mTasks.add(task);
+        TaskRepository.getInstance().add(task);
+    }
+
+    public void removeTask(Task task) {
+        mTasks.remove(task);
+        TaskRepository.getInstance().remove(task);
+    }*/
+
 
     public UUID getId() {
         return mId;

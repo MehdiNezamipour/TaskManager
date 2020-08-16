@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +23,7 @@ import com.example.gittest.R;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
+import com.example.gittest.repositories.TaskRepository;
 import com.example.gittest.repositories.UserRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -48,6 +48,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     private Button mButtonTimePicker;
     private RadioGroup mRadioGroupTaskState;
     private UserRepository mUserRepository;
+    private TaskRepository mTaskRepository;
     private User mUser;
     private OnAddDialogDismissListener mListener;
     private Task mTask;
@@ -75,6 +76,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUserRepository = UserRepository.getInstance();
+        mTaskRepository = TaskRepository.getInstance();
         if (getArguments() != null) {
             mUser = mUserRepository.get(getArguments().getString(ARG_USER_NAME));
             mUserClick = getArguments().getString(ARG_USER_CLICK);
@@ -84,7 +86,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d("ATF", "onAttach");
         try {
             mListener = (OnAddDialogDismissListener) context;
         } catch (ClassCastException e) {
@@ -120,9 +121,10 @@ public class AddTaskDialogFragment extends DialogFragment {
                     .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            mTask = new Task();
+                            mTask = new Task(mUser);
                             setTaskFields();
-                            mUser.getTaskRepository().add(mTask);
+                            mTaskRepository.add(mTask);
+                            //mUser.addTask(mTask);
                             mListener.onDismiss(mTask.getTaskState());
                         }
                     })
@@ -142,23 +144,23 @@ public class AddTaskDialogFragment extends DialogFragment {
                             setTaskFields();
                             switch (mTask.getTaskState()) {
                                 case TODO:
-                                    mUser.getTaskRepository().getTodoTasks().add(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.TODO, mUser).add(mTask);
                                     break;
                                 case DOING:
-                                    mUser.getTaskRepository().getDoingTasks().add(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.DOING, mUser).add(mTask);
                                     break;
                                 case DONE:
-                                    mUser.getTaskRepository().getDoneTasks().add(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.DONE, mUser).add(mTask);
                             }
                             switch (state) {
                                 case TODO:
-                                    mUser.getTaskRepository().getTodoTasks().remove(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.TODO, mUser).remove(mTask);
                                     break;
                                 case DOING:
-                                    mUser.getTaskRepository().getDoingTasks().remove(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.DOING, mUser).remove(mTask);
                                     break;
                                 case DONE:
-                                    mUser.getTaskRepository().getDoneTasks().remove(mTask);
+                                    mTaskRepository.getSpecialTaskList(State.DONE, mUser).remove(mTask);
                             }
                             mListener.onDismiss(state);
                             mListener.onDismiss(mTask.getTaskState());
@@ -174,7 +176,8 @@ public class AddTaskDialogFragment extends DialogFragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             State state = mTask.getTaskState();
-                            mUser.getTaskRepository().remove(mTask);
+                            mTaskRepository.remove(mTask);
+                            //mUser.removeTask(mTask);
                             mListener.onDismiss(state);
                             dismiss();
                         }
@@ -224,7 +227,7 @@ public class AddTaskDialogFragment extends DialogFragment {
         mButtonTimePicker.setEnabled(b);
         mButtonDatePicker.setEnabled(b);
         for (int i = 0; i < mRadioGroupTaskState.getChildCount(); i++) {
-            ((RadioButton) mRadioGroupTaskState.getChildAt(i)).setEnabled(b);
+            mRadioGroupTaskState.getChildAt(i).setEnabled(b);
         }
     }
 
@@ -249,7 +252,7 @@ public class AddTaskDialogFragment extends DialogFragment {
     }
 
     private void findEditableTask() {
-        for (Task task : mUser.getTaskRepository().getList()) {
+        for (Task task : mTaskRepository.getList(mUser)) {
             if (task.getEditable()) {
                 mTask = task;
                 task.setEditable(false);

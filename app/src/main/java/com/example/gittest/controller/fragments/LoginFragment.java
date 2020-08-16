@@ -28,8 +28,6 @@ import com.google.android.material.snackbar.Snackbar;
  */
 public class LoginFragment extends Fragment {
 
-
-    public static final int REQUEST_CODE_SIGNUP_FRAGMENT = 0;
     public static final String SIGN_UP_DIALOG_FRAGMENT_TAG = "signUpDialogFragment";
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
@@ -68,7 +66,6 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         setListeners();
-
         //init ui for fast test app
         initUi();
 
@@ -83,7 +80,7 @@ public class LoginFragment extends Fragment {
         mButtonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mUserRepository.getList().contains(new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString()))) {
+                if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
                     startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
                 } else {
                     Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
@@ -99,6 +96,14 @@ public class LoginFragment extends Fragment {
         });
     }
 
+
+    private boolean checkUserExist(String userName, String passWord) {
+        for (User user : mUserRepository.getList()) {
+            if (user.getUserName().equals(userName) && user.getPassword().equals(passWord))
+                return true;
+        }
+        return false;
+    }
 
     private void findViews(View view) {
         mEditTextUserName = view.findViewById(R.id.editText_username);

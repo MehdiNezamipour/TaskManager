@@ -75,7 +75,6 @@ public class SignUpDialogFragment extends DialogFragment {
                         if (true) {
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString());
                             mUserRepository.add(user);
-                            Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -92,12 +91,22 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private boolean checkInputs() {
-        if (mEditTextUserName.getText().toString().trim().length() == 0 || mEditTextPassword.getText().toString().trim().length() < 8
+        if (checkUserNameExist(mEditTextUserName.getText().toString())
+                || mEditTextUserName.getText().toString().trim().length() == 0
+                || mEditTextPassword.getText().toString().trim().length() < 8
                 || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())) {
             Toast.makeText(getActivity(), "Wrong Inputs", Toast.LENGTH_SHORT).show();
             return false;
         } else
             return true;
+    }
+
+    private boolean checkUserNameExist(String userName) {
+        for (User user : mUserRepository.getList()) {
+            if (user.getUserName().equals(userName))
+                return false;
+        }
+        return true;
     }
 
     private void findViews(View view) {

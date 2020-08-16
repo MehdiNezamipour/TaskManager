@@ -2,6 +2,7 @@ package com.example.gittest.repositories;
 
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
+import com.example.gittest.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,43 +12,58 @@ public class TaskRepository implements IRepository<Task> {
 
 
     private List<Task> mTasks;
-    private ArrayList<Task> mTodoTasks;
-    private ArrayList<Task> mDoingTasks;
-    private ArrayList<Task> mDoneTasks;
+    private List<Task> mTodoTasks;
+    private List<Task> mDoingTasks;
+    private List<Task> mDoneTasks;
+    private static TaskRepository sTaskRepository;
 
 
-    public TaskRepository() {
+    private TaskRepository() {
         mTasks = new ArrayList<>();
         mTodoTasks = new ArrayList<>();
         mDoingTasks = new ArrayList<>();
         mDoneTasks = new ArrayList<>();
     }
 
-    public ArrayList<Task> getTodoTasks() {
-        return mTodoTasks;
+    public static TaskRepository getInstance() {
+        if (sTaskRepository == null)
+            sTaskRepository = new TaskRepository();
+        return sTaskRepository;
     }
 
-
-    public ArrayList<Task> getDoingTasks() {
-        return mDoingTasks;
+    public List<Task> getSpecialTaskList(State state, User user) {
+        List<Task> answer = new ArrayList<>();
+        for (Task task : mTasks) {
+            if (task.getUserId().equals(user.getId()) && task.getTaskState().equals(state))
+                answer.add(task);
+        }
+        switch (state) {
+            case TODO:
+                mTodoTasks = answer;
+                return mTodoTasks;
+            case DOING:
+                mDoingTasks = answer;
+                return mDoingTasks;
+            case DONE:
+                mDoneTasks = answer;
+                return mDoneTasks;
+        }
+        return null;
     }
 
-
-    public ArrayList<Task> getDoneTasks() {
-        return mDoneTasks;
-    }
-
-
-    public void removeAllTasks() {
-        mTasks.clear();
-        mTodoTasks.clear();
-        mDoingTasks.clear();
-        mDoneTasks.clear();
-    }
 
     @Override
     public List<Task> getList() {
         return mTasks;
+    }
+
+    public List<Task> getList(User user) {
+        List<Task> answer = new ArrayList<>();
+        for (Task task : mTasks) {
+            if (task.getUserId().equals(user.getId()))
+                answer.add(task);
+        }
+        return answer;
     }
 
     @Override
@@ -59,15 +75,10 @@ public class TaskRepository implements IRepository<Task> {
         return null;
     }
 
+
     @Override
     public void add(Task task) {
         mTasks.add(task);
-        if (task.getTaskState() == State.TODO)
-            mTodoTasks.add(task);
-        else if (task.getTaskState() == State.DOING)
-            mDoingTasks.add(task);
-        else
-            mDoneTasks.add(task);
     }
 
     @Override

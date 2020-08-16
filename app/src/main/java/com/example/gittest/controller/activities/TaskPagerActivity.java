@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,14 +20,14 @@ import com.example.gittest.R;
 import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.enums.State;
+import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
+import com.example.gittest.repositories.TaskRepository;
 import com.example.gittest.repositories.UserRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-
-import java.util.UUID;
 
 public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialogFragment.OnAddDialogDismissListener, TaskListFragment.OnTaskClickListener {
 
@@ -43,6 +42,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     private TaskListFragment mDoneFragment;
     private ViewPager2 mViewPager2;
     private UserRepository mUserRepository;
+    private TaskRepository mTaskRepository;
     private String mUserName;
     private User mUser;
 
@@ -58,14 +58,15 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         super.onCreate(savedInstanceState);
         mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
         mUserRepository = UserRepository.getInstance();
+        mTaskRepository = TaskRepository.getInstance();
         mUser = mUserRepository.get(mUserName);
 
         mTodoFragment = TaskListFragment.newInstance();
         mDoingFragment = TaskListFragment.newInstance();
         mDoneFragment = TaskListFragment.newInstance();
-        mTodoFragment.setTasks(mUser.getTaskRepository().getTodoTasks());
-        mDoingFragment.setTasks(mUser.getTaskRepository().getDoingTasks());
-        mDoneFragment.setTasks(mUser.getTaskRepository().getDoneTasks());
+        mTodoFragment.setTasks(mTaskRepository.getSpecialTaskList(State.TODO, mUser));
+        mDoingFragment.setTasks(mTaskRepository.getSpecialTaskList(State.DOING, mUser));
+        mDoneFragment.setTasks(mTaskRepository.getSpecialTaskList(State.DONE, mUser));
 
 
         setContentView(R.layout.activity_task_pager);
@@ -110,7 +111,9 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                mUser.getTaskRepository().removeAllTasks();
+                                for (Task task : mTaskRepository.getList(mUser)) {
+                                        mTaskRepository.remove(task);
+                                }
                                 notifyAllAdapter();
                             }
                         })
@@ -142,24 +145,25 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         mTabLayout = findViewById(R.id.tabLayout);
     }
 
+
     @Override
     public void onDismiss(State state) {
         switch (state) {
             case TODO:
                 if (mTodoFragment.getAdapter() != null) {
-                    mTodoFragment.getAdapter().setTasks(mUser.getTaskRepository().getTodoTasks());
+                    mTodoFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.TODO, mUser));
                     mTodoFragment.getAdapter().notifyDataSetChanged();
                 }
                 break;
             case DOING:
                 if (mDoingFragment.getAdapter() != null) {
-                    mDoingFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoingTasks());
+                    mDoingFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DOING, mUser));
                     mDoingFragment.getAdapter().notifyDataSetChanged();
                 }
                 break;
             case DONE:
                 if (mDoneFragment.getAdapter() != null) {
-                    mDoneFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoneTasks());
+                    mDoneFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DONE, mUser));
                     mDoneFragment.getAdapter().notifyDataSetChanged();
                 }
                 break;
@@ -170,16 +174,16 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
     private void notifyAllAdapter() {
         if (mTodoFragment.getAdapter() != null) {
-            mTodoFragment.getAdapter().setTasks(mUser.getTaskRepository().getTodoTasks());
+            mTodoFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.TODO, mUser));
             mTodoFragment.getAdapter().notifyDataSetChanged();
         }
 
         if (mDoingFragment.getAdapter() != null) {
-            mDoingFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoingTasks());
+            mDoingFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DOING, mUser));
             mDoingFragment.getAdapter().notifyDataSetChanged();
         }
         if (mDoneFragment.getAdapter() != null) {
-            mDoneFragment.getAdapter().setTasks(mUser.getTaskRepository().getDoneTasks());
+            mDoneFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DONE, mUser));
             mDoneFragment.getAdapter().notifyDataSetChanged();
         }
     }
