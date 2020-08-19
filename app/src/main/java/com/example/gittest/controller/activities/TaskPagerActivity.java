@@ -108,14 +108,9 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
             case R.id.remove_all_task_menu_item:
                 new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.sureAlertMessage)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                for (Task task : mTaskDBRepository.getList(mUser)) {
-                                        mTaskDBRepository.remove(task);
-                                }
-                                notifyAllAdapter();
-                            }
+                        .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                            mTaskDBRepository.removeAll();
+                            notifyAllAdapter();
                         })
                         .setNeutralButton(android.R.string.cancel, null)
                         .create()
@@ -131,7 +126,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName, "float");
+                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
                 addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
 
             }
@@ -147,32 +142,12 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
 
     @Override
-    public void onDismiss(State state) {
-        switch (state) {
-            case TODO:
-                if (mTodoFragment.getAdapter() != null) {
-                    mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser));
-                    mTodoFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            case DOING:
-                if (mDoingFragment.getAdapter() != null) {
-                    mDoingFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DOING, mUser));
-                    mDoingFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            case DONE:
-                if (mDoneFragment.getAdapter() != null) {
-                    mDoneFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DONE, mUser));
-                    mDoneFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            default:
-                break;
-        }
+    public void onDismiss() {
+        notifyAllAdapter();
     }
 
     private void notifyAllAdapter() {
+
         if (mTodoFragment.getAdapter() != null) {
             mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser));
             mTodoFragment.getAdapter().notifyDataSetChanged();
@@ -189,8 +164,8 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     }
 
     @Override
-    public void onTaskClick() {
-        AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName, "task");
+    public void onTaskClick(Task task) {
+        AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName, task);
         addTaskDialogFragment.show(getSupportFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
     }
 

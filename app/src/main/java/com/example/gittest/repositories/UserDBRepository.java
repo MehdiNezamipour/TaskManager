@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.gittest.database.CursorWrapper.UserCursorWrapper;
+import com.example.gittest.database.TaskDBSchema;
 import com.example.gittest.database.TaskManagerBaseHelper;
 import com.example.gittest.database.UserDBSchema;
 import com.example.gittest.model.User;
@@ -99,6 +100,11 @@ public class UserDBRepository implements IRepository<User> {
         String where = UserDBSchema.UserTable.COLS.UUID + "=?";
         String[] whereArgs = new String[]{user.getId().toString()};
         mDatabase.delete(UserDBSchema.UserTable.NAME, where, whereArgs);
+    }
+
+    @Override
+    public void removeAll() {
+        mDatabase.delete(UserDBSchema.UserTable.NAME, null, null);
     }
 
     @Override

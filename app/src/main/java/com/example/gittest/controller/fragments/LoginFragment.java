@@ -32,7 +32,7 @@ public class LoginFragment extends Fragment {
     private EditText mEditTextPassword;
     private Button mButtonLogin;
     private Button mButtonSignUp;
-    private UserDBRepository mUserRepository;
+    private UserDBRepository mUserDBRepository;
 
 
     public LoginFragment() {
@@ -49,7 +49,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserDBRepository.getInstance(getActivity());
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
 
 
     }
@@ -76,32 +76,26 @@ public class LoginFragment extends Fragment {
     }
 
     private void setListeners() {
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
-                    startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
-                } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
-                        && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
-                    startActivity(UserListActivity.newIntent(getActivity()));
+        mButtonLogin.setOnClickListener(view -> {
+            if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
+                startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
+            } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
+                    && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
+                startActivity(UserListActivity.newIntent(getActivity()));
 
-                } else {
-                    Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
-                }
+            } else {
+                Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
             }
         });
-        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SignUpDialogFragment signUpDialogFragment = SignUpDialogFragment.newInstance();
-                signUpDialogFragment.show(getFragmentManager(), SIGN_UP_DIALOG_FRAGMENT_TAG);
-            }
+        mButtonSignUp.setOnClickListener(view -> {
+            SignUpDialogFragment signUpDialogFragment = SignUpDialogFragment.newInstance();
+            signUpDialogFragment.show(getFragmentManager(), SIGN_UP_DIALOG_FRAGMENT_TAG);
         });
     }
 
 
     private boolean checkUserExist(String userName, String passWord) {
-        for (User user : mUserRepository.getList()) {
+        for (User user : mUserDBRepository.getList()) {
             if (user.getUserName().equals(userName) && user.getPassword().equals(passWord))
                 return true;
         }

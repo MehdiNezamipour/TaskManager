@@ -28,7 +28,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private EditText mEditTextRepeatPassword;
-    private UserDBRepository mUserRepository;
+    private UserDBRepository mUserDBRepository;
 
 
     public SignUpDialogFragment() {
@@ -45,7 +45,7 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserDBRepository.getInstance(getActivity());
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
     }
 
     @NonNull
@@ -66,7 +66,7 @@ public class SignUpDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (true) {
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString());
-                            mUserRepository.add(user);
+                            mUserDBRepository.add(user);
                         }
 
                     }
@@ -86,7 +86,8 @@ public class SignUpDialogFragment extends DialogFragment {
         if (checkUserNameExist(mEditTextUserName.getText().toString())
                 || mEditTextUserName.getText().toString().trim().length() == 0
                 || mEditTextPassword.getText().toString().trim().length() < 8
-                || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())) {
+                || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())
+                || mEditTextUserName.getText().toString().equalsIgnoreCase("admin")) {
             Toast.makeText(getActivity(), "Wrong Inputs", Toast.LENGTH_SHORT).show();
             return false;
         } else
@@ -94,7 +95,7 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private boolean checkUserNameExist(String userName) {
-        for (User user : mUserRepository.getList()) {
+        for (User user : mUserDBRepository.getList()) {
             if (user.getUserName().equals(userName))
                 return false;
         }

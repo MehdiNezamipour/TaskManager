@@ -13,6 +13,8 @@ public interface IRepository<E> {
 
     void remove(E e);
 
+    void removeAll();
+
     void update(E e);
 
 }

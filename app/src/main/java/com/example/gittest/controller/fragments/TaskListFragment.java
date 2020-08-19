@@ -45,7 +45,7 @@ public class TaskListFragment extends Fragment {
     private OnTaskClickListener mListener;
 
     public interface OnTaskClickListener {
-        void onTaskClick();
+        void onTaskClick(Task task);
     }
 
 
@@ -71,9 +71,6 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (mAdapter == null) {
-            mAdapter = new TaskAdapter(mTasks);
-        }
     }
 
     @Override
@@ -97,10 +94,14 @@ public class TaskListFragment extends Fragment {
         } else if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
-
+        if (mAdapter == null) {
+            mAdapter = new TaskAdapter(mTasks);
+        }
+        mAdapter.setTasks(mTasks);
         mTaskRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
+
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -159,8 +160,8 @@ public class TaskListFragment extends Fragment {
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onTaskClick();
-                    task.setEditable(true);
+                    mListener.onTaskClick(task);
+
                 }
             });
         }
