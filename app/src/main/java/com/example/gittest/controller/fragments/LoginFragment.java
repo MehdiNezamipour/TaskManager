@@ -1,6 +1,5 @@
 package com.example.gittest.controller.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,13 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskPagerActivity;
 import com.example.gittest.controller.activities.UserListActivity;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -34,7 +32,7 @@ public class LoginFragment extends Fragment {
     private EditText mEditTextPassword;
     private Button mButtonLogin;
     private Button mButtonSignUp;
-    private UserRepository mUserRepository;
+    private UserDBRepository mUserRepository;
 
 
     public LoginFragment() {
@@ -51,7 +49,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
+        mUserRepository = UserDBRepository.getInstance(getActivity());
 
 
     }

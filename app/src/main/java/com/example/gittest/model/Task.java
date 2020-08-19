@@ -18,19 +18,29 @@ import java.util.UUID;
 public class Task implements Serializable {
 
     private UUID mTaskId;
+    private UUID mUserId;
     private String mTaskTitle;
     private String mTaskSubject;
     private State mTaskState;
     private String mDate;
     private String mTime;
     private boolean mEditable;
-    private UUID mUserId;
 
 
     public Task(User user) {
         mUserId = user.getId();
         mTaskId = UUID.randomUUID();
+    }
 
+    public Task(UUID taskId, UUID userId, String taskTitle, String taskSubject, State taskState, String date, String time, boolean editable) {
+        mTaskId = taskId;
+        mUserId = userId;
+        mTaskTitle = taskTitle;
+        mTaskSubject = taskSubject;
+        mTaskState = taskState;
+        mDate = date;
+        mTime = time;
+        mEditable = editable;
     }
 
     public UUID getTaskId() {

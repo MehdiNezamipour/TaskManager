@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gittest.R;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
@@ -53,7 +53,7 @@ public class AdminFragment extends Fragment {
         if (getArguments() != null) {
             mUserName = getArguments().getString(ARG_USER_NAME);
         }
-        mUser = UserRepository.getInstance().get(mUserName);
+        mUser = UserDBRepository.getInstance(getActivity()).get(mUserName);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class AdminFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (mAdapter == null) {
-            mAdapter = new TaskAdapter(TaskRepository.getInstance().getList(mUser));
+            mAdapter = new TaskAdapter(TaskDBRepository.getInstance(getActivity()).getList(mUser));
         }
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

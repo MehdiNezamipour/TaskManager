@@ -1,4 +1,4 @@
-package com.example.gittest.utils.adapters;
+package com.example.gittest.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

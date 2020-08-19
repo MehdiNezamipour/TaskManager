@@ -1,14 +1,11 @@
 package com.example.gittest.controller.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,13 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.gittest.R;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.IRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +28,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private EditText mEditTextRepeatPassword;
-    private UserRepository mUserRepository;
+    private UserDBRepository mUserRepository;
 
 
     public SignUpDialogFragment() {
@@ -53,7 +45,7 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
+        mUserRepository = UserDBRepository.getInstance(getActivity());
     }
 
     @NonNull

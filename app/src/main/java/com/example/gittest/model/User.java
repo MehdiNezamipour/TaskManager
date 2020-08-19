@@ -21,6 +21,13 @@ public class User implements Serializable {
         mDate = new Date();
     }
 
+    public User(String userName, String password, UUID id, Date date) {
+        mUserName = userName;
+        mPassword = password;
+        mId = id;
+        mDate = date;
+    }
+
     public String getUserName() {
         return mUserName;
     }

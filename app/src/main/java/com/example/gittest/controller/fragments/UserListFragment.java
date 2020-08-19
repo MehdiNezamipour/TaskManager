@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.repositories.UserRepository;
-import com.example.gittest.utils.adapters.UserListAdapter;
+import com.example.gittest.repositories.UserDBRepository;
+import com.example.gittest.adapters.UserListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +22,7 @@ import com.example.gittest.utils.adapters.UserListAdapter;
  */
 public class UserListFragment extends Fragment {
 
-    private UserRepository mUserRepository;
+    private UserDBRepository mUserRepository;
     private RecyclerView mRecyclerView;
     private UserListAdapter mAdapter;
 
@@ -41,7 +41,7 @@ public class UserListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
+        mUserRepository = UserDBRepository.getInstance(getActivity());
 
     }
 

@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
@@ -23,8 +22,8 @@ import com.example.gittest.R;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.UUID;
@@ -47,8 +46,8 @@ public class AddTaskDialogFragment extends DialogFragment {
     private Button mButtonDatePicker;
     private Button mButtonTimePicker;
     private RadioGroup mRadioGroupTaskState;
-    private UserRepository mUserRepository;
-    private TaskRepository mTaskRepository;
+    private UserDBRepository mUserRepository;
+    private TaskDBRepository mTaskRepository;
     private User mUser;
     private OnAddDialogDismissListener mListener;
     private Task mTask;
@@ -75,8 +74,8 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
-        mTaskRepository = TaskRepository.getInstance();
+        mUserRepository = UserDBRepository.getInstance(getActivity());
+        mTaskRepository = TaskDBRepository.getInstance(getActivity());
         if (getArguments() != null) {
             mUser = mUserRepository.get(getArguments().getString(ARG_USER_NAME));
             mUserClick = getArguments().getString(ARG_USER_CLICK);
