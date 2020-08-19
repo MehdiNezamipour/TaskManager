@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.activities.TaskPagerActivity">
-
-        </activity>
+        <activity android:name=".controller.activities.AdminActivity"></activity>
+        <activity android:name=".controller.activities.UserListActivity" />
+        <activity android:name=".controller.activities.TaskPagerActivity" />
         <activity android:name=".controller.activities.TaskListActivity" />
         <activity android:name=".controller.activities.SignUpActivity">
             <intent-filter>
@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.activities.SingleFragmentActivity"/>
+        <activity android:name=".controller.activities.SingleFragmentActivity" />
     </application>
 
 </manifest>

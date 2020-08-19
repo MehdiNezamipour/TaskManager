@@ -1,10 +1,7 @@
 package com.example.gittest.model;
 
-import com.example.gittest.repositories.TaskRepository;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,6 +10,7 @@ public class User implements Serializable {
     private String mUserName;
     private String mPassword;
     private UUID mId;
+    private Date mDate;
     //private List<Task> mTasks;
 
     public User(String userName, String password) {
@@ -20,6 +18,7 @@ public class User implements Serializable {
         mUserName = userName;
         mPassword = password;
         mId = UUID.randomUUID();
+        mDate = new Date();
     }
 
     public String getUserName() {
@@ -38,6 +37,9 @@ public class User implements Serializable {
         return mPassword;
     }
 
+    public Date getDate() {
+        return mDate;
+    }
 
     /*public List<Task> getTasks() {
         return mTasks;

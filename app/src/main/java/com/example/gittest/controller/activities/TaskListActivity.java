@@ -9,7 +9,7 @@ import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.enums.State;
 
-public class TaskListActivity extends SingleFragmentActivity implements AddTaskDialogFragment.OnAddDialogDismissListener, TaskListFragment.OnTaskClickListener  {
+public class TaskListActivity extends SingleFragmentActivity  {
 
 
     public static Intent newIntent(Context context) {
@@ -22,13 +22,4 @@ public class TaskListActivity extends SingleFragmentActivity implements AddTaskD
         return TaskListFragment.newInstance();
     }
 
-    @Override
-    public void onDismiss(State state) {
-
-    }
-
-    @Override
-    public void onTaskClick() {
-
-    }
 }
