@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controller.fragments.LoginFragment"
+    android:focusable="true"
     android:gravity="center_horizontal"
     android:orientation="vertical"
+    tools:context=".controller.fragments.LoginFragment"
 
     >
 
@@ -13,11 +14,10 @@
         android:id="@+id/editText_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
         android:layout_marginTop="72dp"
+        android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName" />
-
 
 
     <EditText
@@ -31,23 +31,22 @@
 
     <Button
         android:id="@+id/button_login"
-        android:textSize="22sp"
-        android:layout_marginTop="120dp"
-        android:textColor="@android:color/white"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
+        android:layout_marginTop="120dp"
         android:text="@string/login"
-        />
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/button_signUp"
-        android:textSize="22sp"
-        android:textColor="@android:color/white"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:textAllCaps="false"
         android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
 
         />
 

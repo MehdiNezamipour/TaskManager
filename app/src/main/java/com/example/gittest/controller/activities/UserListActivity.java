@@ -5,7 +5,7 @@ import android.content.Intent;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.gittest.controller.fragments.UserListFragment;
+import com.example.gittest.controller.fragments.UserManageFragment;
 
 public class UserListActivity extends SingleFragmentActivity {
 
@@ -16,6 +16,6 @@ public class UserListActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return UserListFragment.newInstance();
+        return UserManageFragment.newInstance();
     }
 }

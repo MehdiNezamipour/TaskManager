@@ -1,5 +1,8 @@
 package com.example.gittest.model;
 
+
+import com.example.gittest.enums.Role;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -11,7 +14,7 @@ public class User implements Serializable {
     private String mPassword;
     private UUID mId;
     private Date mDate;
-    //private List<Task> mTasks;
+    private Role mRole;
 
     public User(String userName, String password) {
         //mTasks = new ArrayList<>();
@@ -48,24 +51,13 @@ public class User implements Serializable {
         return mDate;
     }
 
-    /*public List<Task> getTasks() {
-        return mTasks;
+    public Role getRole() {
+        return mRole;
     }
 
-    public void setTasks(List<Task> tasks) {
-        mTasks = tasks;
+    public void setRole(Role role) {
+        mRole = role;
     }
-
-    public void addTask(Task task) {
-        mTasks.add(task);
-        TaskRepository.getInstance().add(task);
-    }
-
-    public void removeTask(Task task) {
-        mTasks.remove(task);
-        TaskRepository.getInstance().remove(task);
-    }*/
-
 
     public UUID getId() {
         return mId;

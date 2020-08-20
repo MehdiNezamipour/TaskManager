@@ -56,6 +56,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
         mUserDBRepository = UserDBRepository.getInstance(this);
         mTaskDBRepository = TaskDBRepository.getInstance(this);

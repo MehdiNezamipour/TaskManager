@@ -1,13 +1,11 @@
 package com.example.gittest.controller.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
-import com.example.gittest.controller.fragments.AdminFragment;
+import com.example.gittest.controller.fragments.TaskManageFragment;
 
 public class AdminActivity extends SingleFragmentActivity {
 
@@ -21,7 +19,7 @@ public class AdminActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return AdminFragment.newInstance(getIntent().getStringExtra(EXTRA_USER_NAME));
+        return TaskManageFragment.newInstance(getIntent().getStringExtra(EXTRA_USER_NAME));
     }
 
 }

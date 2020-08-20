@@ -3,6 +3,11 @@ package com.example.gittest.controller.fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,23 +16,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.NumberPicker;
-import android.widget.TextView;
-
 import com.example.gittest.R;
 import com.example.gittest.model.Task;
 import com.google.android.material.card.MaterialCardView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,6 +37,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
     private OnTaskClickListener mListener;
+
 
     public interface OnTaskClickListener {
         void onTaskClick(Task task);
@@ -81,21 +76,22 @@ public class TaskListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-        initUI(view);
-        return view;
+        return inflater.inflate(R.layout.fragment_task_list, container, false);
+
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        findViews(view);
         if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mTaskRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         } else if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
+
         if (mAdapter == null) {
-            mAdapter = new TaskAdapter(mTasks);
+            mAdapter = new TaskAdapter();
         }
         mAdapter.setTasks(mTasks);
         mTaskRecyclerView.setAdapter(mAdapter);
@@ -113,25 +109,11 @@ public class TaskListFragment extends Fragment {
         }
     }
 
-    private void initUI(View view) {
+    private void findViews(View view) {
         mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
         mImageViewEmptyList = view.findViewById(R.id.imageView_empty_list);
         mTextViewEmptyList = view.findViewById(R.id.textView_empty_list);
     }
-
-    private void updateUI() {
-
-        /*
-        if (mTasks.size() == 0) {
-            mImageViewEmptyList.setVisibility(View.VISIBLE);
-            mTextViewEmptyList.setVisibility(View.VISIBLE);
-        } else {
-            mImageViewEmptyList.setVisibility(View.GONE);
-            mTextViewEmptyList.setVisibility(View.GONE);
-        }*/
-
-    }
-
 
     public class TaskHolder extends RecyclerView.ViewHolder {
 
@@ -154,6 +136,7 @@ public class TaskListFragment extends Fragment {
             mTextViewTaskTitle.setText(task.getTaskTitle());
             mTextViewTaskSubject.setText(task.getTaskSubject());
             mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
+            mTextViewTaskIcon.setText(task.getTaskTitle());
             /*if (getAdapterPosition() % 2 == 0) {
                 mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
             }*/
@@ -172,12 +155,15 @@ public class TaskListFragment extends Fragment {
 
         List<Task> mTasks;
 
-        public TaskAdapter(List<Task> tasks) {
-            mTasks = tasks;
-        }
-
         public void setTasks(List<Task> tasks) {
             mTasks = tasks;
+            if (mTasks.size() == 0) {
+                mImageViewEmptyList.setVisibility(View.VISIBLE);
+                mTextViewEmptyList.setVisibility(View.VISIBLE);
+            } else {
+                mImageViewEmptyList.setVisibility(View.GONE);
+                mTextViewEmptyList.setVisibility(View.GONE);
+            }
         }
 
         @NonNull

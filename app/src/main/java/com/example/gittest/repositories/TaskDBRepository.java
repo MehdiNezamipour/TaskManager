@@ -129,6 +129,12 @@ public class TaskDBRepository implements IRepository<Task> {
         mDatabase.delete(TaskDBSchema.TaskTable.NAME, null, null);
     }
 
+    public void removeAllUserTasks(User user) {
+        for (Task task : getList(user)) {
+            remove(task);
+        }
+    }
+
     @Override
     public void update(Task task) {
         ContentValues contentValues = getTaskContentValue(task);
