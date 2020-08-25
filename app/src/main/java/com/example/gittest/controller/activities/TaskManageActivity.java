@@ -12,6 +12,7 @@ public class TaskManageActivity extends SingleFragmentActivity implements AddTas
 
     public static final String EXTRA_USER_NAME = "com.example.gittest.userName";
     private String mUserName;
+    TaskManageFragment mFragment;
 
     public static Intent newIntent(Context context, String userName) {
         Intent intent = new Intent(context, TaskManageActivity.class);
@@ -22,12 +23,13 @@ public class TaskManageActivity extends SingleFragmentActivity implements AddTas
     @Override
     protected Fragment createFragment() {
         mUserName = getIntent().getStringExtra(EXTRA_USER_NAME);
-        return TaskManageFragment.newInstance(mUserName);
+        mFragment = TaskManageFragment.newInstance(mUserName);
+        return mFragment;
     }
 
 
     @Override
     public void onDismiss() {
-
+        mFragment.getAdapter().notifyDataSetChanged();
     }
 }

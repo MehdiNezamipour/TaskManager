@@ -11,9 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.EditTaskDialogFragment;
-import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.model.Task;
 import com.google.android.material.card.MaterialCardView;
 

@@ -32,11 +32,15 @@ import java.util.List;
 public class TaskManageFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private TaskListAdapter mAdapter;
+    private  TaskListAdapter mAdapter;
     private String mUserName;
     private User mUser;
 
     public static final String ARG_USER_NAME = "com.example.gittest.userName";
+
+    public  TaskListAdapter getAdapter() {
+        return mAdapter;
+    }
 
     public TaskManageFragment() {
         // Required empty public constructor
@@ -82,68 +86,6 @@ public class TaskManageFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recyclerView_admin);
     }
 
-   /* public class TaskHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextViewTaskTitle;
-        private TextView mTextViewTaskSubject;
-        private TextView mTextViewTaskDate;
-        private TextView mTextViewTaskIcon;
-        private MaterialCardView mMaterialCardView;
-
-        public TaskHolder(@NonNull View itemView) {
-            super(itemView);
-            mMaterialCardView = itemView.findViewById(R.id.card_container);
-            mTextViewTaskTitle = itemView.findViewById(R.id.textView_task_title);
-            mTextViewTaskSubject = itemView.findViewById(R.id.textView_task_subject);
-            mTextViewTaskDate = itemView.findViewById(R.id.textView_task_date);
-            mTextViewTaskIcon = itemView.findViewById(R.id.textView_task_icon);
-        }
-
-        public void bindTask(Task task) {
-            mTextViewTaskTitle.setText(task.getTaskTitle());
-            mTextViewTaskSubject.setText(task.getTaskSubject());
-            mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
-
-            mTextViewTaskIcon.setText(task.getTaskTitle());
-            mMaterialCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO
-                }
-            });
-        }
-    }
-
-    public class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
-
-        List<Task> mTasks;
-
-        public TaskAdapter(List<Task> tasks) {
-            mTasks = tasks;
-        }
-
-        public void setTasks(List<Task> tasks) {
-            mTasks = tasks;
-        }
-
-        @NonNull
-        @Override
-        public TaskHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.task_row_layout, viewGroup, false);
-            return new TaskHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TaskHolder taskHolder, int i) {
-            taskHolder.bindTask(mTasks.get(i));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mTasks.size();
-        }
-    }*/
 
 
 }
