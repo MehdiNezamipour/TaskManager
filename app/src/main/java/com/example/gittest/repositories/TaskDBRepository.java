@@ -88,11 +88,14 @@ public class TaskDBRepository implements IRepository<Task> {
         List<Task> tasks = new ArrayList<>();
         StringBuilder selection = new StringBuilder();
         List<String> selectionArg = new ArrayList<>();
-        selection.append(TaskDBSchema.TaskTable.COLS.USER_ID + " = ? " + " AND ");
-        selectionArg.add(user.getId().toString());
+
+        if (user != null) {
+            selection.append(TaskDBSchema.TaskTable.COLS.USER_ID + " = ? " + " AND ");
+            selectionArg.add(user.getId().toString());
+        }
         if (!title.equals("")) {
             selection.append(TaskDBSchema.TaskTable.COLS.TITLE + " LIKE ? " + " AND ");
-            selectionArg.add("%"+ title +"%");
+            selectionArg.add("%" + title + "%");
         }
         if (!subject.equals("")) {
             selection.append(TaskDBSchema.TaskTable.COLS.SUBJECT + " LIKE ?" + " AND ");

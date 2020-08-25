@@ -1,5 +1,6 @@
 package com.example.gittest.adapters;
 
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,30 +8,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.controller.fragments.AddTaskDialogFragment;
-import com.example.gittest.controller.fragments.EditTaskDialogFragment;
-import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.model.Task;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
-public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskHolder> {
+public class TaskSearchAdapter extends RecyclerView.Adapter<TaskSearchAdapter.TaskHolder> {
 
-    public static final String EDIT_TASK_DIALOG_FRAGMENT_TAG = "editTaskDialogFragment";
-    private List<Task> mTasks;
-    private Context mContext;
-    private Fragment mFragment;
-    private String mUserName;
+    List<Task> mTasks;
+    Context mContext;
 
-    public TaskListAdapter(Context context, Fragment fragment, String userName) {
+    public TaskSearchAdapter(Context context) {
         mContext = context;
-        mFragment = fragment;
-        mUserName = userName;
     }
 
     public void setTasks(List<Task> tasks) {
@@ -57,7 +49,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskHo
         return mTasks.size();
     }
 
-
     public class TaskHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTaskTitle;
         private TextView mTextViewTaskSubject;
@@ -79,17 +70,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskHo
             mTextViewTaskSubject.setText(task.getTaskSubject());
             mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
             mTextViewTaskIcon.setText(task.getTaskTitle());
-
-            mMaterialCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditTaskDialogFragment editTaskDialogFragment = EditTaskDialogFragment.newInstance(mUserName, task);
-                    editTaskDialogFragment.show(mFragment.getFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
-                }
-            });
-
         }
-
     }
 
 }
+

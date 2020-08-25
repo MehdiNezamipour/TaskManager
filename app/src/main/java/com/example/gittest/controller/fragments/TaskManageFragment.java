@@ -1,5 +1,7 @@
 package com.example.gittest.controller.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
+import com.example.gittest.adapters.TaskListAdapter;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
@@ -29,7 +32,7 @@ import java.util.List;
 public class TaskManageFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private TaskAdapter mAdapter;
+    private TaskListAdapter mAdapter;
     private String mUserName;
     private User mUser;
 
@@ -67,17 +70,19 @@ public class TaskManageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (mAdapter == null) {
-            mAdapter = new TaskAdapter(TaskDBRepository.getInstance(getActivity()).getList(mUser));
+            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
         }
+        mAdapter.setTasks(TaskDBRepository.getInstance(getActivity()).getList(mUser));
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
+
 
     private void findViews(@NonNull View view) {
         mRecyclerView = view.findViewById(R.id.recyclerView_admin);
     }
 
-    public class TaskHolder extends RecyclerView.ViewHolder {
+   /* public class TaskHolder extends RecyclerView.ViewHolder {
 
         private TextView mTextViewTaskTitle;
         private TextView mTextViewTaskSubject;
@@ -98,13 +103,12 @@ public class TaskManageFragment extends Fragment {
             mTextViewTaskTitle.setText(task.getTaskTitle());
             mTextViewTaskSubject.setText(task.getTaskSubject());
             mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
-            /*if (getAdapterPosition() % 2 == 0) {
-                mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
-            }*/
+
             mTextViewTaskIcon.setText(task.getTaskTitle());
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //TODO
                 }
             });
         }
@@ -139,7 +143,7 @@ public class TaskManageFragment extends Fragment {
         public int getItemCount() {
             return mTasks.size();
         }
-    }
+    }*/
 
 
 }

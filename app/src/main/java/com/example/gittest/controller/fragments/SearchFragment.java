@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.adapters.TaskListAdapter;
+import com.example.gittest.adapters.TaskSearchAdapter;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
@@ -39,7 +39,7 @@ import static com.example.gittest.controller.fragments.AddTaskDialogFragment.TIM
 public class SearchFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private TaskListAdapter mAdapter;
+    private TaskSearchAdapter mAdapter;
     private EditText mEditTextSearchTitle;
     private EditText mEditTextSearchSubject;
     private Button mButtonSearchDate;
@@ -90,7 +90,7 @@ public class SearchFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         if (mAdapter == null) {
-            mAdapter = new TaskListAdapter(getActivity());
+            mAdapter = new TaskSearchAdapter(getActivity());
         }
 
         mRecyclerView.setAdapter(mAdapter);

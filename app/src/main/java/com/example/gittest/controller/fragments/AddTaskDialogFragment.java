@@ -50,21 +50,14 @@ public class AddTaskDialogFragment extends DialogFragment {
     private OnAddDialogDismissListener mListener;
     private Task mTask;
 
+
+
     public interface OnAddDialogDismissListener {
         void onDismiss();
     }
 
     public AddTaskDialogFragment() {
         // Required empty public constructor
-    }
-
-    public static AddTaskDialogFragment newInstance(String userName, Task task) {
-        AddTaskDialogFragment fragment = new AddTaskDialogFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_USER_NAME, userName);
-        args.putSerializable(ARG_TASK, task);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     public static AddTaskDialogFragment newInstance(String userName) {
@@ -115,58 +108,23 @@ public class AddTaskDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_add_task_dialog, null);
         findViews(view);
         setListeners();
+        initUi();
 
-        if (mTask == null) {
-            initUi();
-            return new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle(R.string.addingTask)
-                    .setView(view)
-                    .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            mTask = new Task(mUser);
-                            setTaskFields(mTask);
-                            mTaskDBRepository.add(mTask);
-                            //mUser.addTask(mTask);
-                            mListener.onDismiss();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, null)
-                    .setCancelable(true)
-                    .create();
-        } else {
-            setEnable(false);
-            initUi();
-            AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
-                    .setTitle(R.string.editTask)
-                    .setView(view)
-                    .setPositiveButton(R.string.save, (dialogInterface, i) -> {
-                        setTaskFields(mTask);
-                        mTaskDBRepository.update(mTask);
-                        mListener.onDismiss();
-
-                    })
-                    .setNegativeButton(R.string.edit, (dialogInterface, i) -> {
-
-                    })
-                    .setNeutralButton(R.string.remove, (dialogInterface, i) -> {
-                        mTaskDBRepository.remove(mTask);
-                        //mUser.removeTask(mTask);
-                        mListener.onDismiss();
-                        dismiss();
-                    }).create();
-
-            alertDialog.setOnShowListener(dialogInterface -> {
-                Button button = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
-                button.setOnClickListener(new View.OnClickListener() {
+        return new MaterialAlertDialogBuilder(getActivity())
+                .setTitle(R.string.addingTask)
+                .setView(view)
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(View view1) {
-                        setEnable(true);
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        mTask = new Task(mUser);
+                        setTaskFields(mTask);
+                        mTaskDBRepository.add(mTask);
+                        mListener.onDismiss();
                     }
-                });
-            });
-            return alertDialog;
-        }
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .setCancelable(true)
+                .create();
     }
 
     private void setTaskFields(Task task) {
@@ -189,15 +147,6 @@ public class AddTaskDialogFragment extends DialogFragment {
         }
     }
 
-    private void setEnable(boolean b) {
-        mEditTextTaskTitle.setEnabled(b);
-        mEditTextTaskSubject.setEnabled(b);
-        mButtonTimePicker.setEnabled(b);
-        mButtonDatePicker.setEnabled(b);
-        for (int i = 0; i < mRadioGroupTaskState.getChildCount(); i++) {
-            mRadioGroupTaskState.getChildAt(i).setEnabled(b);
-        }
-    }
 
     private void setListeners() {
         mButtonDatePicker.setOnClickListener(new View.OnClickListener() {
@@ -220,31 +169,11 @@ public class AddTaskDialogFragment extends DialogFragment {
     }
 
     private void initUi() {
-        if (mTask != null) {
-            mEditTextTaskTitle.setText(mTask.getTaskTitle());
-            mEditTextTaskSubject.setText(mTask.getTaskSubject());
-            mButtonDatePicker.setText(mTask.getDate());
-            mButtonTimePicker.setText(mTask.getTime());
-            switch (mTask.getTaskState()) {
-                case TODO:
-                    mRadioGroupTaskState.check(R.id.radioButton_task_todo);
-                    break;
-                case DOING:
-                    mRadioGroupTaskState.check(R.id.radioButton_task_doing);
-                    break;
-                case DONE:
-                    mRadioGroupTaskState.check(R.id.radioButton_task_done);
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            mEditTextTaskTitle.setText(null);
-            mEditTextTaskSubject.setText(null);
-            mButtonDatePicker.setText(R.string.selectDate);
-            mButtonTimePicker.setText(R.string.selectTime);
-            mRadioGroupTaskState.check(R.id.radioButton_task_todo);
-        }
+        mEditTextTaskTitle.setText(null);
+        mEditTextTaskSubject.setText(null);
+        mButtonDatePicker.setText(R.string.selectDate);
+        mButtonTimePicker.setText(R.string.selectTime);
+        mRadioGroupTaskState.check(R.id.radioButton_task_todo);
     }
 
     private void findViews(View view) {

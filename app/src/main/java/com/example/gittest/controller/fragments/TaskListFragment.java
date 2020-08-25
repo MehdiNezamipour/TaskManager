@@ -28,13 +28,14 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.gittest.adapters.TaskListAdapter.EDIT_TASK_DIALOG_FRAGMENT_TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link TaskListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class TaskListFragment extends Fragment {
-
 
 
     public static final String ARG_STATE = "state";
@@ -45,16 +46,10 @@ public class TaskListFragment extends Fragment {
     private List<Task> mTasks = new ArrayList<>();
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
-    private OnTaskClickListener mListener;
     private State mState;
     private TaskDBRepository mTaskDBRepository;
     private String mUserName;
     private User mUser;
-
-
-    public interface OnTaskClickListener {
-        void onTaskClick(Task task);
-    }
 
 
     public TaskAdapter getAdapter() {
@@ -141,17 +136,6 @@ public class TaskListFragment extends Fragment {
     }
 
 
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (TaskListFragment.OnTaskClickListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement OnTaskClickListener");
-        }
-    }
-
     private void findViews(View view) {
         mTaskRecyclerView = view.findViewById(R.id.recyclerView_task_list);
         mImageViewEmptyList = view.findViewById(R.id.imageView_empty_list);
@@ -190,13 +174,11 @@ public class TaskListFragment extends Fragment {
             mTextViewTaskSubject.setText(task.getTaskSubject());
             mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
             mTextViewTaskIcon.setText(task.getTaskTitle());
-            /*if (getAdapterPosition() % 2 == 0) {
-                mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
-            }*/
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mListener.onTaskClick(task);
+                    EditTaskDialogFragment editTaskDialogFragment = EditTaskDialogFragment.newInstance(mUserName, task);
+                    editTaskDialogFragment.show(getFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
                 }
             });
         }
@@ -219,7 +201,6 @@ public class TaskListFragment extends Fragment {
             }
 
         }
-
 
 
         @NonNull
