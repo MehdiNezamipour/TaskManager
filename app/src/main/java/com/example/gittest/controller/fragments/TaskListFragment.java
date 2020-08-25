@@ -2,6 +2,7 @@ package com.example.gittest.controller.fragments;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,12 +79,13 @@ public class TaskListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("TLF", "onCreate");
         mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
+
         if (getArguments() != null) {
             mState = (State) getArguments().getSerializable(ARG_STATE);
             mUserName = getArguments().getString(ARG_USER_NAME);
         }
-
         mUser = UserDBRepository.getInstance(getActivity()).get(mUserName);
 
         if (savedInstanceState != null) {
@@ -115,6 +117,11 @@ public class TaskListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        if (mAdapter == null) {
+            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
+        }
+
         return inflater.inflate(R.layout.fragment_task_list, container, false);
 
     }
@@ -140,9 +147,7 @@ public class TaskListFragment extends Fragment {
 
 
     private void updateAdapter() {
-        if (mAdapter == null) {
-            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
-        }
+
         mAdapter.setTasks(mTasks);
         mTaskRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -150,11 +155,10 @@ public class TaskListFragment extends Fragment {
     }
 
     public void changeVisibility() {
-        if (mAdapter.getItemCount() == 0){
+        if (mAdapter.getItemCount() == 0) {
             mImageViewEmptyList.setVisibility(View.VISIBLE);
             mTextViewEmptyList.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             mImageViewEmptyList.setVisibility(View.GONE);
             mTextViewEmptyList.setVisibility(View.GONE);
         }

@@ -127,13 +127,9 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
 
     private void setListeners() {
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
-                addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
-
-            }
+        mFloatingActionButton.setOnClickListener(view -> {
+            AddTaskDialogFragment addTaskDialogFragment = AddTaskDialogFragment.newInstance(mUserName);
+            addTaskDialogFragment.show(getSupportFragmentManager(), ADD_TASK_DIALOG_FRAGMENT_TAG);
         });
     }
 
