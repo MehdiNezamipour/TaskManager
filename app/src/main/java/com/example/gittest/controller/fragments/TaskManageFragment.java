@@ -23,10 +23,10 @@ import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AdminFragment#newInstance} factory method to
+ * Use the {@link TaskManageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdminFragment extends Fragment {
+public class TaskManageFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private TaskAdapter mAdapter;
@@ -35,12 +35,12 @@ public class AdminFragment extends Fragment {
 
     public static final String ARG_USER_NAME = "com.example.gittest.userName";
 
-    public AdminFragment() {
+    public TaskManageFragment() {
         // Required empty public constructor
     }
 
-    public static AdminFragment newInstance(String userName) {
-        AdminFragment fragment = new AdminFragment();
+    public static TaskManageFragment newInstance(String userName) {
+        TaskManageFragment fragment = new TaskManageFragment();
         Bundle args = new Bundle();
         args.putString(ARG_USER_NAME, userName);
         fragment.setArguments(args);

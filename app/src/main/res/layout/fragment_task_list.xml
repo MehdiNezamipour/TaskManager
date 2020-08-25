@@ -12,14 +12,13 @@
         android:id="@+id/recyclerView_task_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#07636363"
         tools:context=".controller.fragments.TaskListFragment"/>
 
     <ImageView
         android:id="@+id/imageView_empty_list"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_empty_list"
+        android:src="@mipmap/empty_box"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

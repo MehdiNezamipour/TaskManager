@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.controller.activities.AdminActivity;
+import com.example.gittest.controller.activities.TaskManageActivity;
 import com.example.gittest.model.User;
 
 import java.util.List;
@@ -62,7 +62,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mContext.startActivity(AdminActivity.newIntent(mContext, mTextViewUserName.getText().toString()));
+                    mContext.startActivity(TaskManageActivity.newIntent(mContext, mTextViewUserName.getText().toString()));
                 }
             });
         }

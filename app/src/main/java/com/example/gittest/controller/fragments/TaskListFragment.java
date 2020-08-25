@@ -98,8 +98,8 @@ public class TaskListFragment extends Fragment {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
 
-        mTaskRecyclerView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        updateAdapter();
+        changeVisibility();
     }
 
     @Override
@@ -118,17 +118,23 @@ public class TaskListFragment extends Fragment {
         mTextViewEmptyList = view.findViewById(R.id.textView_empty_list);
     }
 
-    private void updateUI() {
+    private void updateAdapter() {
 
-        /*
-        if (mTasks.size() == 0) {
+        mAdapter.setTasks(mTasks);
+        mTaskRecyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+
+
+    }
+
+    public void changeVisibility() {
+        if (mAdapter.getItemCount() == 0) {
             mImageViewEmptyList.setVisibility(View.VISIBLE);
             mTextViewEmptyList.setVisibility(View.VISIBLE);
         } else {
             mImageViewEmptyList.setVisibility(View.GONE);
             mTextViewEmptyList.setVisibility(View.GONE);
-        }*/
-
+        }
     }
 
 
@@ -153,9 +159,8 @@ public class TaskListFragment extends Fragment {
             mTextViewTaskTitle.setText(task.getTaskTitle());
             mTextViewTaskSubject.setText(task.getTaskSubject());
             mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
-            /*if (getAdapterPosition() % 2 == 0) {
-                mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
-            }*/
+            mTextViewTaskIcon.setText(task.getTaskTitle());
+
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

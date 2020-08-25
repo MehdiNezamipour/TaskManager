@@ -17,22 +17,22 @@ import com.example.gittest.utils.adapters.UserListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link UserListFragment#newInstance} factory method to
+ * Use the {@link UserManageFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserListFragment extends Fragment {
+public class UserManageFragment extends Fragment {
 
     private UserRepository mUserRepository;
     private RecyclerView mRecyclerView;
     private UserListAdapter mAdapter;
 
 
-    public UserListFragment() {
+    public UserManageFragment() {
         // Required empty public constructor
     }
 
-    public static UserListFragment newInstance() {
-        UserListFragment fragment = new UserListFragment();
+    public static UserManageFragment newInstance() {
+        UserManageFragment fragment = new UserManageFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

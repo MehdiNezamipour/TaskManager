@@ -112,7 +112,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 for (Task task : mTaskRepository.getList(mUser)) {
-                                        mTaskRepository.remove(task);
+                                    mTaskRepository.remove(task);
                                 }
                                 notifyAllAdapter();
                             }
@@ -148,43 +148,25 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
     @Override
     public void onDismiss(State state) {
-        switch (state) {
-            case TODO:
-                if (mTodoFragment.getAdapter() != null) {
-                    mTodoFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.TODO, mUser));
-                    mTodoFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            case DOING:
-                if (mDoingFragment.getAdapter() != null) {
-                    mDoingFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DOING, mUser));
-                    mDoingFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            case DONE:
-                if (mDoneFragment.getAdapter() != null) {
-                    mDoneFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DONE, mUser));
-                    mDoneFragment.getAdapter().notifyDataSetChanged();
-                }
-                break;
-            default:
-                break;
-        }
+        notifyAllAdapter();
     }
 
     private void notifyAllAdapter() {
         if (mTodoFragment.getAdapter() != null) {
             mTodoFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.TODO, mUser));
             mTodoFragment.getAdapter().notifyDataSetChanged();
+            mTodoFragment.changeVisibility();
         }
 
         if (mDoingFragment.getAdapter() != null) {
             mDoingFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DOING, mUser));
             mDoingFragment.getAdapter().notifyDataSetChanged();
+            mDoingFragment.changeVisibility();
         }
         if (mDoneFragment.getAdapter() != null) {
             mDoneFragment.getAdapter().setTasks(mTaskRepository.getSpecialTaskList(State.DONE, mUser));
             mDoneFragment.getAdapter().notifyDataSetChanged();
+            mDoneFragment.changeVisibility();
         }
     }
 

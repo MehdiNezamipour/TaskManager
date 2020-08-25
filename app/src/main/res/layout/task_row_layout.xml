@@ -57,9 +57,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/circular_drawable"
+            android:gravity="center"
+            android:maxLength="1"
+            android:textAllCaps="true"
+            android:textColor="@android:color/white"
+            android:textSize="45sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="a" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
