@@ -19,7 +19,6 @@ import com.example.gittest.R;
 import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
 import com.example.gittest.enums.State;
-import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
 import com.example.gittest.repositories.UserDBRepository;
@@ -32,7 +31,6 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
     public static final String EXTRA_USERNAME = "userName";
     public static final String ADD_TASK_DIALOG_FRAGMENT_TAG = "AddTaskDialogFragment";
-    public static final String EDIT_TASK_DIALOG_FRAGMENT_TAG = "editTaskDialogFragment";
     public static final String BUNDLE_USERNAME = "username";
 
     private TabLayout mTabLayout;
@@ -157,15 +155,18 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         if (mTodoFragment.getAdapter() != null) {
             mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser));
             mTodoFragment.getAdapter().notifyDataSetChanged();
+            mTodoFragment.changeVisibility();
         }
 
         if (mDoingFragment.getAdapter() != null) {
             mDoingFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DOING, mUser));
             mDoingFragment.getAdapter().notifyDataSetChanged();
+            mDoingFragment.changeVisibility();
         }
         if (mDoneFragment.getAdapter() != null) {
             mDoneFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DONE, mUser));
             mDoneFragment.getAdapter().notifyDataSetChanged();
+            mDoneFragment.changeVisibility();
         }
     }
 

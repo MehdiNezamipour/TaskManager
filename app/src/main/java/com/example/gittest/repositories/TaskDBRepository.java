@@ -98,7 +98,7 @@ public class TaskDBRepository implements IRepository<Task> {
             selectionArg.add("%" + title + "%");
         }
         if (!subject.equals("")) {
-            selection.append(TaskDBSchema.TaskTable.COLS.SUBJECT + " LIKE ?" + " AND ");
+            selection.append(TaskDBSchema.TaskTable.COLS.SUBJECT + " LIKE ? " + " AND ");
             selectionArg.add("%" + subject + "%");
         }
         if (!date.equalsIgnoreCase("select date")) {

@@ -92,7 +92,6 @@ public class SearchFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new TaskSearchAdapter(getActivity());
         }
-
         mRecyclerView.setAdapter(mAdapter);
         setListeners();
 

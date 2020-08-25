@@ -12,7 +12,7 @@ public class TaskManageActivity extends SingleFragmentActivity implements AddTas
 
     public static final String EXTRA_USER_NAME = "com.example.gittest.userName";
     private String mUserName;
-    TaskManageFragment mFragment;
+    private TaskManageFragment mFragment;
 
     public static Intent newIntent(Context context, String userName) {
         Intent intent = new Intent(context, TaskManageActivity.class);

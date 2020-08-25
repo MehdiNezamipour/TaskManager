@@ -82,6 +82,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskHo
                 @Override
                 public void onClick(View view) {
                     EditTaskDialogFragment editTaskDialogFragment = EditTaskDialogFragment.newInstance(mUserName, task);
+                    assert mFragment.getFragmentManager() != null;
                     editTaskDialogFragment.show(mFragment.getFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
                 }
             });

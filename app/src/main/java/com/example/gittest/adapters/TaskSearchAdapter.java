@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
 import com.example.gittest.model.Task;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
 
@@ -54,11 +53,10 @@ public class TaskSearchAdapter extends RecyclerView.Adapter<TaskSearchAdapter.Ta
         private TextView mTextViewTaskSubject;
         private TextView mTextViewTaskDate;
         private TextView mTextViewTaskIcon;
-        private MaterialCardView mMaterialCardView;
+
 
         public TaskHolder(@NonNull View itemView) {
             super(itemView);
-            mMaterialCardView = itemView.findViewById(R.id.card_container);
             mTextViewTaskTitle = itemView.findViewById(R.id.textView_task_title);
             mTextViewTaskSubject = itemView.findViewById(R.id.textView_task_subject);
             mTextViewTaskDate = itemView.findViewById(R.id.textView_task_date);

@@ -1,6 +1,5 @@
 package com.example.gittest.controller.fragments;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,12 +22,9 @@ import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
 import com.example.gittest.repositories.UserDBRepository;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.gittest.adapters.TaskListAdapter.EDIT_TASK_DIALOG_FRAGMENT_TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,7 +38,7 @@ public class TaskListFragment extends Fragment {
     public static final String BUNDLE_STATE = "state";
     public static final String ARG_USER_NAME = "userName";
     private RecyclerView mTaskRecyclerView;
-    private TaskAdapter mAdapter;
+    private TaskListAdapter mAdapter;
     private List<Task> mTasks = new ArrayList<>();
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
@@ -52,7 +48,7 @@ public class TaskListFragment extends Fragment {
     private User mUser;
 
 
-    public TaskAdapter getAdapter() {
+    public TaskListAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -145,81 +141,24 @@ public class TaskListFragment extends Fragment {
 
     private void updateAdapter() {
         if (mAdapter == null) {
-            mAdapter = new TaskAdapter();
+            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
         }
         mAdapter.setTasks(mTasks);
         mTaskRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
+        changeVisibility();
     }
 
-    public class TaskHolder extends RecyclerView.ViewHolder {
-
-        private TextView mTextViewTaskTitle;
-        private TextView mTextViewTaskSubject;
-        private TextView mTextViewTaskDate;
-        private TextView mTextViewTaskIcon;
-        private MaterialCardView mMaterialCardView;
-
-        public TaskHolder(@NonNull View itemView) {
-            super(itemView);
-            mMaterialCardView = itemView.findViewById(R.id.card_container);
-            mTextViewTaskTitle = itemView.findViewById(R.id.textView_task_title);
-            mTextViewTaskSubject = itemView.findViewById(R.id.textView_task_subject);
-            mTextViewTaskDate = itemView.findViewById(R.id.textView_task_date);
-            mTextViewTaskIcon = itemView.findViewById(R.id.textView_task_icon);
+    public void changeVisibility() {
+        if (mAdapter.getItemCount() == 0){
+            mImageViewEmptyList.setVisibility(View.VISIBLE);
+            mTextViewEmptyList.setVisibility(View.VISIBLE);
         }
-
-        public void bindTask(Task task) {
-            mTextViewTaskTitle.setText(task.getTaskTitle());
-            mTextViewTaskSubject.setText(task.getTaskSubject());
-            mTextViewTaskDate.setText(task.getDate() + "        " + task.getTime());
-            mTextViewTaskIcon.setText(task.getTaskTitle());
-            mMaterialCardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditTaskDialogFragment editTaskDialogFragment = EditTaskDialogFragment.newInstance(mUserName, task);
-                    editTaskDialogFragment.show(getFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
-                }
-            });
-        }
-
-    }
-
-    public class TaskAdapter extends RecyclerView.Adapter<TaskHolder> {
-
-        List<Task> mTasks;
-
-        public void setTasks(List<Task> tasks) {
-            mTasks = tasks;
-
-            if (mTasks.size() == 0) {
-                mImageViewEmptyList.setVisibility(View.VISIBLE);
-                mTextViewEmptyList.setVisibility(View.VISIBLE);
-            } else {
-                mImageViewEmptyList.setVisibility(View.GONE);
-                mTextViewEmptyList.setVisibility(View.GONE);
-            }
-
-        }
-
-
-        @NonNull
-        @Override
-        public TaskHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int position) {
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View view = inflater.inflate(R.layout.task_row_layout, viewGroup, false);
-            return new TaskHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TaskHolder taskHolder, int position) {
-            taskHolder.bindTask(mTasks.get(position));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mTasks.size();
+        else {
+            mImageViewEmptyList.setVisibility(View.GONE);
+            mTextViewEmptyList.setVisibility(View.GONE);
         }
     }
+
 
 }
