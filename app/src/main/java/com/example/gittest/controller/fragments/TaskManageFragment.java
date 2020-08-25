@@ -101,10 +101,10 @@ public class TaskManageFragment extends Fragment {
             /*if (getAdapterPosition() % 2 == 0) {
                 mMaterialCardView.setBackgroundColor(getResources().getColor(R.color.lightGreen));
             }*/
+            mTextViewTaskIcon.setText(task.getTaskTitle());
             mMaterialCardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    task.setEditable(true);
                 }
             });
         }

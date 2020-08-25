@@ -34,6 +34,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     public static final String EXTRA_USERNAME = "userName";
     public static final String ADD_TASK_DIALOG_FRAGMENT_TAG = "AddTaskDialogFragment";
     public static final String EDIT_TASK_DIALOG_FRAGMENT_TAG = "editTaskDialogFragment";
+    public static final String BUNDLE_USERNAME = "username";
 
     private TabLayout mTabLayout;
     private FloatingActionButton mFloatingActionButton;
@@ -56,18 +57,18 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         mUserName = getIntent().getStringExtra(EXTRA_USERNAME);
+
+        if (savedInstanceState != null) {
+            mUserName = savedInstanceState.getString(BUNDLE_USERNAME);
+        }
+
         mUserDBRepository = UserDBRepository.getInstance(this);
         mTaskDBRepository = TaskDBRepository.getInstance(this);
         mUser = mUserDBRepository.get(mUserName);
-
-        mTodoFragment = TaskListFragment.newInstance();
-        mDoingFragment = TaskListFragment.newInstance();
-        mDoneFragment = TaskListFragment.newInstance();
-        mTodoFragment.setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser));
-        mDoingFragment.setTasks(mTaskDBRepository.getSpecialTaskList(State.DOING, mUser));
-        mDoneFragment.setTasks(mTaskDBRepository.getSpecialTaskList(State.DONE, mUser));
+        mTodoFragment = TaskListFragment.newInstance(State.TODO, mUserName);
+        mDoingFragment = TaskListFragment.newInstance(State.DOING, mUserName);
+        mDoneFragment = TaskListFragment.newInstance(State.DONE, mUserName);
 
 
         setContentView(R.layout.activity_task_pager);
@@ -91,6 +92,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString(BUNDLE_USERNAME, mUserName);
     }
 
     @Override
@@ -117,6 +119,10 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                         .create()
                         .show();
                 return true;
+            case R.id.search_menu_item:
+                startActivity(SearchActivity.newIntent(this, mUserName));
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -186,6 +192,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                 return mDoingFragment;
             else if (position == 2)
                 return mDoneFragment;
+
             return null;
         }
 

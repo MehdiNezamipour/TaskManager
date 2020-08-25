@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.gittest.database.CursorWrapper.TaskCursorWrapper;
 import com.example.gittest.database.TaskDBSchema;
 import com.example.gittest.database.TaskManagerBaseHelper;
-import com.example.gittest.database.UserDBSchema;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
@@ -41,7 +40,7 @@ public class TaskDBRepository implements IRepository<Task> {
         List<Task> tasks = new ArrayList<>();
         String selection = TaskDBSchema.TaskTable.COLS.USER_ID + " =?" + " AND " + TaskDBSchema.TaskTable.COLS.STATE + " =?";
         String[] selectionArgs = new String[]{user.getId().toString(), state.toString()};
-        TaskCursorWrapper cursor = queryCrimes(selection, selectionArgs);
+        TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
 
         try {
             cursor.moveToFirst();
@@ -51,6 +50,75 @@ public class TaskDBRepository implements IRepository<Task> {
             }
         } finally {
             cursor.close();
+        }
+        return tasks;
+    }
+
+    public List<Task> getList(User user) {
+        List<Task> tasks = new ArrayList<>();
+        String selection = TaskDBSchema.TaskTable.COLS.USER_ID + " =?";
+        String[] selectionArgs = new String[]{user.getId().toString()};
+        TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
+
+        try {
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                tasks.add(cursor.getTask());
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+        return tasks;
+    }
+
+    private TaskCursorWrapper queryTasks(String selection, String[] selectionArgs) {
+        Cursor cursor = mDatabase.query(true, TaskDBSchema.TaskTable.NAME, null,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null,
+                null);
+        return new TaskCursorWrapper(cursor);
+    }
+
+
+    public List<Task> searchQuery(User user, String title, String subject, String date, String time) {
+        List<Task> tasks = new ArrayList<>();
+        StringBuilder selection = new StringBuilder();
+        List<String> selectionArg = new ArrayList<>();
+        selection.append(TaskDBSchema.TaskTable.COLS.USER_ID + " = ? " + " AND ");
+        selectionArg.add(user.getId().toString());
+        if (!title.equals("")) {
+            selection.append(TaskDBSchema.TaskTable.COLS.TITLE + " LIKE ? " + " AND ");
+            selectionArg.add("%"+ title +"%");
+        }
+        if (!subject.equals("")) {
+            selection.append(TaskDBSchema.TaskTable.COLS.SUBJECT + " LIKE ?" + " AND ");
+            selectionArg.add("%" + subject + "%");
+        }
+        if (!date.equalsIgnoreCase("select date")) {
+            selection.append(TaskDBSchema.TaskTable.COLS.DATE + " = ? " + " AND ");
+            selectionArg.add(date);
+        }
+        if (!time.equalsIgnoreCase("select time")) {
+            selection.append(TaskDBSchema.TaskTable.COLS.TIME + " = ? " + "     ");
+            selectionArg.add(time);
+        }
+        selection.delete(selection.length() - 4, selection.length());
+        String[] array = new String[selectionArg.size()];
+        selectionArg.toArray(array);
+
+        TaskCursorWrapper taskCursorWrapper = new TaskCursorWrapper(queryTasks(selection.toString(), array));
+        try {
+            taskCursorWrapper.moveToFirst();
+            while (!taskCursorWrapper.isAfterLast()) {
+                tasks.add(taskCursorWrapper.getTask());
+                taskCursorWrapper.moveToNext();
+            }
+        } finally {
+            taskCursorWrapper.close();
         }
         return tasks;
     }
@@ -61,41 +129,13 @@ public class TaskDBRepository implements IRepository<Task> {
         return null;
     }
 
-    public List<Task> getList(User user) {
-        List<Task> tasks = new ArrayList<>();
-        String selection = TaskDBSchema.TaskTable.COLS.USER_ID + " =?";
-        String[] selectionArgs = new String[]{user.getId().toString()};
-        TaskCursorWrapper cursor = queryCrimes(selection, selectionArgs);
-
-        try {
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                tasks.add(cursor.getTask());
-                cursor.moveToNext();
-            }
-        } finally {
-            cursor.close();
-        }
-        return tasks;
-    }
-
-    private TaskCursorWrapper queryCrimes(String selection, String[] selectionArgs) {
-        Cursor cursor = mDatabase.query(TaskDBSchema.TaskTable.NAME,
-                null,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                null);
-        return new TaskCursorWrapper(cursor);
-    }
 
     @Override
     public Task get(UUID id) {
         Task task = null;
         String selection = TaskDBSchema.TaskTable.COLS.UUID + " =?";
         String[] selectionArgs = new String[]{id.toString()};
-        TaskCursorWrapper cursor = queryCrimes(selection, selectionArgs);
+        TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
 
         try {
             cursor.moveToFirst();
@@ -153,7 +193,6 @@ public class TaskDBRepository implements IRepository<Task> {
         values.put(TaskDBSchema.TaskTable.COLS.STATE, task.getTaskState().toString());
         values.put(TaskDBSchema.TaskTable.COLS.DATE, task.getDate());
         values.put(TaskDBSchema.TaskTable.COLS.TIME, task.getTime());
-        values.put(TaskDBSchema.TaskTable.COLS.EDITABLE, task.getEditable());
         return values;
 
     }

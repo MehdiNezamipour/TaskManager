@@ -20,8 +20,7 @@
     <EditText
         android:id="@+id/editText_task_subject"
         android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
         android:ems="12"
         android:hint="@string/subject"
         android:inputType="textPersonName" />
@@ -38,14 +37,13 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp" />
+        />
 
     <RadioGroup
         android:id="@+id/radioGroup_task_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <RadioButton

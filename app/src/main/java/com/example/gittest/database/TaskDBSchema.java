@@ -18,7 +18,6 @@ public final class TaskDBSchema {
             public static final String STATE = "State";
             public static final String DATE = "Date";
             public static final String TIME = "Time";
-            public static final String EDITABLE = "Editable";
 
         }
     }

@@ -3,4 +3,5 @@
     android:id="@+id/timePicker_task_time"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:timePickerMode="spinner"
     tools:context="com.example.gittest.controller.fragments.DatePickerDialogFragment" />

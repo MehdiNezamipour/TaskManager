@@ -3,5 +3,6 @@
     android:id="@+id/datePicker_task_date"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.example.gittest.controller.fragments.DatePickerDialogFragment"
-    />
+    android:calendarViewShown="false"
+    android:datePickerMode="spinner"
+    tools:context="com.example.gittest.controller.fragments.DatePickerDialogFragment" />

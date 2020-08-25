@@ -1,20 +1,19 @@
 package com.example.gittest.controller.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskPagerActivity;
-import com.example.gittest.controller.activities.UserListActivity;
+import com.example.gittest.controller.activities.UserManageActivity;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -81,7 +80,7 @@ public class LoginFragment extends Fragment {
                 startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
             } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
                     && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
-                startActivity(UserListActivity.newIntent(getActivity()));
+                startActivity(UserManageActivity.newIntent(getActivity()));
 
             } else {
                 Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();

@@ -27,9 +27,8 @@ public class TaskCursorWrapper extends CursorWrapper {
         String date = getString(getColumnIndex(TaskTable.COLS.DATE));
         String time = getString(getColumnIndex(TaskTable.COLS.TIME));
         State state = State.valueOf(getString(getColumnIndex(TaskTable.COLS.STATE)));
-        boolean editable = getInt(getColumnIndex(TaskTable.COLS.EDITABLE)) != 0;
 
 
-        return new Task(UUID.fromString(stringUUID), UUID.fromString(stringUserID), title, subject, state, date, time, editable);
+        return new Task(UUID.fromString(stringUUID), UUID.fromString(stringUserID), title, subject, state, date, time);
     }
 }

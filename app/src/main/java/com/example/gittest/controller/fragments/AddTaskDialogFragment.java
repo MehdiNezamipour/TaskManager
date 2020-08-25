@@ -26,8 +26,6 @@ import com.example.gittest.repositories.TaskDBRepository;
 import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.util.UUID;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AddTaskDialogFragment#newInstance} factory method to
@@ -51,7 +49,6 @@ public class AddTaskDialogFragment extends DialogFragment {
     private User mUser;
     private OnAddDialogDismissListener mListener;
     private Task mTask;
-    private String mUserClick;
 
     public interface OnAddDialogDismissListener {
         void onDismiss();

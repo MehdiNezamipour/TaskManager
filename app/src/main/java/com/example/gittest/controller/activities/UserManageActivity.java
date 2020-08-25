@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.gittest.controller.fragments.UserManageFragment;
 
-public class UserListActivity extends SingleFragmentActivity {
+public class UserManageActivity extends SingleFragmentActivity {
 
     public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, UserListActivity.class);
+        Intent intent = new Intent(context, UserManageActivity.class);
         return intent;
     }
 

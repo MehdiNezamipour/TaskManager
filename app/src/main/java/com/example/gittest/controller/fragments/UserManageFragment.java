@@ -60,7 +60,6 @@ public class UserManageFragment extends Fragment {
     }
 
 
-
     private void updateUi() {
         if (mAdapter == null)
             mAdapter = new UserListAdapter(getActivity());

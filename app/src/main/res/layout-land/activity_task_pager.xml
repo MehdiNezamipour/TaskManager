@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.gittest.controller.activities.TaskPagerActivity">
 
     <com.google.android.material.tabs.TabLayout
@@ -21,10 +22,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:contentDescription="@string/add"
-        android:src="@drawable/ic_action_name" />
+        android:backgroundTint="@color/navigationBarColor"
+        android:src="@drawable/ic_action_name"
+
+        />
 
 </RelativeLayout>

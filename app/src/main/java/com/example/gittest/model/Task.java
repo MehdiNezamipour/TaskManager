@@ -24,7 +24,6 @@ public class Task implements Serializable {
     private State mTaskState;
     private String mDate;
     private String mTime;
-    private boolean mEditable;
 
 
     public Task(User user) {
@@ -32,7 +31,7 @@ public class Task implements Serializable {
         mTaskId = UUID.randomUUID();
     }
 
-    public Task(UUID taskId, UUID userId, String taskTitle, String taskSubject, State taskState, String date, String time, boolean editable) {
+    public Task(UUID taskId, UUID userId, String taskTitle, String taskSubject, State taskState, String date, String time) {
         mTaskId = taskId;
         mUserId = userId;
         mTaskTitle = taskTitle;
@@ -40,7 +39,7 @@ public class Task implements Serializable {
         mTaskState = taskState;
         mDate = date;
         mTime = time;
-        mEditable = editable;
+
     }
 
     public UUID getTaskId() {
@@ -88,21 +87,11 @@ public class Task implements Serializable {
         mTime = time;
     }
 
-    public boolean getEditable() {
-        return mEditable;
-    }
-
-    public void setEditable(boolean editable) {
-        mEditable = editable;
-    }
 
     public UUID getUserId() {
         return mUserId;
     }
 
-    public void setUserId(UUID userId) {
-        mUserId = userId;
-    }
 
     @Override
     public boolean equals(Object o) {
