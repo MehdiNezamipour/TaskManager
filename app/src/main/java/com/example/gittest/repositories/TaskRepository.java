@@ -103,4 +103,9 @@ public class TaskRepository implements IRepository<Task> {
     }
 
 
+    public void removeAllUserTasks(User user) {
+        for (Task task : getList(user)) {
+            remove(task);
+        }
+    }
 }

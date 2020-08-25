@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
+import com.example.gittest.adapters.UserListAdapter;
 import com.example.gittest.repositories.UserRepository;
-import com.example.gittest.utils.adapters.UserListAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,10 +60,9 @@ public class UserManageFragment extends Fragment {
     }
 
 
-
     private void updateUi() {
         if (mAdapter == null)
-            mAdapter = new UserListAdapter(getActivity());
+            mAdapter = new UserListAdapter(getActivity(), mUserRepository.getList());
         mAdapter.setUsers(mUserRepository.getList());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
