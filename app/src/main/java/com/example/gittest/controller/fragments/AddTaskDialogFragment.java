@@ -21,8 +21,8 @@ import com.example.gittest.R;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 /**
@@ -43,8 +43,8 @@ public class AddTaskDialogFragment extends DialogFragment {
     private Button mButtonDatePicker;
     private Button mButtonTimePicker;
     private RadioGroup mRadioGroupTaskState;
-    private UserRepository mUserRepository;
-    private TaskRepository mTaskRepository;
+    private UserDBRepository mUserDBRepository;
+    private TaskDBRepository mTaskDBRepository;
     private User mUser;
     private OnAddDialogDismissListener mListener;
     private Task mTask;
@@ -70,10 +70,10 @@ public class AddTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
-        mTaskRepository = TaskRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
         if (getArguments() != null) {
-            mUser = mUserRepository.get(getArguments().getString(ARG_USER_NAME));
+            mUser = mUserDBRepository.get(getArguments().getString(ARG_USER_NAME));
             mTask = (Task) getArguments().getSerializable(ARG_TASK);
         }
     }
@@ -117,7 +117,7 @@ public class AddTaskDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         mTask = new Task(mUser);
                         setTaskFields(mTask);
-                        mTaskRepository.add(mTask);
+                        mTaskDBRepository.add(mTask);
                         mListener.onDismiss();
                     }
                 })

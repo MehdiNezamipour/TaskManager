@@ -18,18 +18,27 @@ import java.util.UUID;
 public class Task implements Serializable {
 
     private UUID mTaskId;
+    private UUID mUserId;
     private String mTaskTitle;
     private String mTaskSubject;
     private State mTaskState;
     private String mDate;
     private String mTime;
-    private boolean mEditable;
-    private UUID mUserId;
 
 
     public Task(User user) {
         mUserId = user.getId();
         mTaskId = UUID.randomUUID();
+    }
+
+    public Task(UUID taskId, UUID userId, String taskTitle, String taskSubject, State taskState, String date, String time) {
+        mTaskId = taskId;
+        mUserId = userId;
+        mTaskTitle = taskTitle;
+        mTaskSubject = taskSubject;
+        mTaskState = taskState;
+        mDate = date;
+        mTime = time;
 
     }
 
@@ -78,21 +87,11 @@ public class Task implements Serializable {
         mTime = time;
     }
 
-    public boolean getEditable() {
-        return mEditable;
-    }
-
-    public void setEditable(boolean editable) {
-        mEditable = editable;
-    }
 
     public UUID getUserId() {
         return mUserId;
     }
 
-    public void setUserId(UUID userId) {
-        mUserId = userId;
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,9 +1,12 @@
 package com.example.gittest.controller.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,9 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
 import com.example.gittest.adapters.TaskListAdapter;
+import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
+import com.google.android.material.card.MaterialCardView;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,13 +32,13 @@ import com.example.gittest.repositories.UserRepository;
 public class TaskManageFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private TaskListAdapter mAdapter;
+    private  TaskListAdapter mAdapter;
     private String mUserName;
     private User mUser;
 
     public static final String ARG_USER_NAME = "com.example.gittest.userName";
 
-    public TaskListAdapter getAdapter() {
+    public  TaskListAdapter getAdapter() {
         return mAdapter;
     }
 
@@ -53,7 +60,7 @@ public class TaskManageFragment extends Fragment {
         if (getArguments() != null) {
             mUserName = getArguments().getString(ARG_USER_NAME);
         }
-        mUser = UserRepository.getInstance().get(mUserName);
+        mUser = UserDBRepository.getInstance(getActivity()).get(mUserName);
     }
 
     @Override
@@ -69,7 +76,7 @@ public class TaskManageFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
         }
-        mAdapter.setTasks(TaskRepository.getInstance().getList(mUser));
+        mAdapter.setTasks(TaskDBRepository.getInstance(getActivity()).getList(mUser));
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
@@ -78,6 +85,7 @@ public class TaskManageFragment extends Fragment {
     private void findViews(@NonNull View view) {
         mRecyclerView = view.findViewById(R.id.recyclerView_admin);
     }
+
 
 
 }

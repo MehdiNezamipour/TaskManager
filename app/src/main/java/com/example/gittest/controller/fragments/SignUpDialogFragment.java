@@ -1,14 +1,11 @@
 package com.example.gittest.controller.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,13 +15,8 @@ import androidx.fragment.app.Fragment;
 
 import com.example.gittest.R;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.IRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +28,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private EditText mEditTextRepeatPassword;
-    private UserRepository mUserRepository;
+    private UserDBRepository mUserDBRepository;
 
 
     public SignUpDialogFragment() {
@@ -53,7 +45,7 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
     }
 
     @NonNull
@@ -74,7 +66,7 @@ public class SignUpDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (true) {
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString());
-                            mUserRepository.add(user);
+                            mUserDBRepository.add(user);
                         }
 
                     }
@@ -94,7 +86,8 @@ public class SignUpDialogFragment extends DialogFragment {
         if (checkUserNameExist(mEditTextUserName.getText().toString())
                 || mEditTextUserName.getText().toString().trim().length() == 0
                 || mEditTextPassword.getText().toString().trim().length() < 8
-                || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())) {
+                || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())
+                || mEditTextUserName.getText().toString().equalsIgnoreCase("admin")) {
             Toast.makeText(getActivity(), "Wrong Inputs", Toast.LENGTH_SHORT).show();
             return false;
         } else
@@ -102,7 +95,7 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private boolean checkUserNameExist(String userName) {
-        for (User user : mUserRepository.getList()) {
+        for (User user : mUserDBRepository.getList()) {
             if (user.getUserName().equals(userName))
                 return false;
         }

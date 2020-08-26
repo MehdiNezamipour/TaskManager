@@ -5,15 +5,16 @@ import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
-import com.example.gittest.enums.State;
 
-public class TaskListActivity extends SingleFragmentActivity  {
+public class TaskListActivity extends SingleFragmentActivity {
 
 
-    public static Intent newIntent(Context context) {
+    public static final String EXTRA_USER_NAME = "userName";
+
+    public static Intent newIntent(Context context, String userName) {
         Intent intent = new Intent(context, TaskListActivity.class);
+        intent.putExtra(EXTRA_USER_NAME, userName);
         return intent;
     }
 

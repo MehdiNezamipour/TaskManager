@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskManageActivity;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.List;
@@ -24,15 +24,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
 
     private List<User> mUsers;
     private Context mContext;
-    private UserRepository mUserRepository;
-    private TaskRepository mTaskRepository;
+    private TaskDBRepository mTaskDBRepository;
+    private UserDBRepository mUserDBRepository;
 
 
-    public UserListAdapter(Context context, List<User> users) {
+    public UserListAdapter(Context context) {
         mContext = context;
-        mUsers = users;
-        mUserRepository = UserRepository.getInstance();
-        mTaskRepository = TaskRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(mContext);
+        mUserDBRepository = UserDBRepository.getInstance(mContext);
     }
 
     public void setUsers(List<User> users) {
@@ -74,6 +73,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
             mTextViewUserIcon = itemView.findViewById(R.id.textView_user_icon);
             mImageButtonDelete = itemView.findViewById(R.id.imageButton_delete);
 
+<<<<<<<< HEAD:app/src/main/java/com/example/gittest/adapters/UserListAdapter.java
+========
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(TaskManageActivity.newIntent(mContext, mTextViewUserName.getText().toString()));
+                }
+            });
+>>>>>>>> develope:app/src/main/java/com/example/gittest/utils/adapters/UserListAdapter.java
         }
 
         public void bindUser(User user) {
@@ -84,9 +92,9 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
             mImageButtonDelete.setOnClickListener(view -> new MaterialAlertDialogBuilder(mContext)
                     .setTitle(R.string.removeUser)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        mUserRepository.remove(user);
-                        mTaskRepository.removeAllUserTasks(user);
-                        setUsers(mUserRepository.getList());
+                        mUserDBRepository.remove(user);
+                        mTaskDBRepository.removeAllUserTasks(user);
+                        setUsers(mUserDBRepository.getList());
                         notifyDataSetChanged();
 
                     })

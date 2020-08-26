@@ -21,8 +21,8 @@ import com.example.gittest.adapters.TaskListAdapter;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mImageViewEmptyList;
     private TextView mTextViewEmptyList;
     private State mState;
-    private TaskRepository mTaskRepository;
+    private TaskDBRepository mTaskDBRepository;
     private String mUserName;
     private User mUser;
 
@@ -53,10 +53,6 @@ public class TaskListFragment extends Fragment {
         return mAdapter;
     }
 
-
-    public void setTasks(List<Task> tasks) {
-        mTasks = tasks;
-    }
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -84,13 +80,13 @@ public class TaskListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("TLF", "onCreate");
-        mTaskRepository = TaskRepository.getInstance();
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
 
         if (getArguments() != null) {
             mState = (State) getArguments().getSerializable(ARG_STATE);
             mUserName = getArguments().getString(ARG_USER_NAME);
         }
-        mUser = UserRepository.getInstance().get(mUserName);
+        mUser = UserDBRepository.getInstance(getActivity()).get(mUserName);
 
         if (savedInstanceState != null) {
             mState = (State) savedInstanceState.getSerializable(BUNDLE_STATE);
@@ -99,13 +95,13 @@ public class TaskListFragment extends Fragment {
         assert mState != null;
         switch (mState) {
             case TODO:
-                mTasks = mTaskRepository.getSpecialTaskList(State.TODO, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.TODO, mUser);
                 break;
             case DOING:
-                mTasks = mTaskRepository.getSpecialTaskList(State.DOING, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.DOING, mUser);
                 break;
             case DONE:
-                mTasks = mTaskRepository.getSpecialTaskList(State.DONE, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.DONE, mUser);
                 break;
         }
 

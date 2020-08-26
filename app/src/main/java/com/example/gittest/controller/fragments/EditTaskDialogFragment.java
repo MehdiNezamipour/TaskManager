@@ -21,15 +21,16 @@ import com.example.gittest.R;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.TaskRepository;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.TaskDBRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import static com.example.gittest.controller.fragments.AddTaskDialogFragment.ARG_USER_NAME;
+import static com.example.gittest.controller.fragments.AddTaskDialogFragment.ARG_TASK;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.DATE_PICKER_DIALOG_FRAGMENT_TAG;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_DATE_PICKER;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_TIME_PICKER;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.TIME_PICKER_DIALOG_FRAGMENT_TAG;
+import static com.example.gittest.controller.fragments.TaskListFragment.ARG_USER_NAME;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,14 +39,13 @@ import static com.example.gittest.controller.fragments.AddTaskDialogFragment.TIM
  */
 public class EditTaskDialogFragment extends DialogFragment {
 
-    private static final String ARG_TASK = "task";
     private EditText mEditTextTaskTitle;
     private EditText mEditTextTaskSubject;
     private Button mButtonDatePicker;
     private Button mButtonTimePicker;
     private RadioGroup mRadioGroupTaskState;
-    private UserRepository mUserDBRepository;
-    private TaskRepository mTaskDBRepository;
+    private UserDBRepository mUserDBRepository;
+    private TaskDBRepository mTaskDBRepository;
     private User mUser;
     private AddTaskDialogFragment.OnAddDialogDismissListener mListener;
     private Task mTask;
@@ -66,8 +66,8 @@ public class EditTaskDialogFragment extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserDBRepository = UserRepository.getInstance();
-        mTaskDBRepository = TaskRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
+        mTaskDBRepository = TaskDBRepository.getInstance(getActivity());
         if (getArguments() != null) {
             mUser = mUserDBRepository.get(getArguments().getString(ARG_USER_NAME));
             mTask = (Task) getArguments().getSerializable(ARG_TASK);

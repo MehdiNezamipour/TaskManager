@@ -27,7 +27,10 @@
     <string name="logout">logout</string>
     <string name="yes">yes</string>
     <string name="sureAlertMessage">Are you sure to remove all tasks ?</string>
-    <string name="removeUser">Do you want delete this user ?</string>
+    <string name="removeUser">Are you sure to remove this user ?</string>
+    <string name="search_subject">search subject</string>
+    <string name="search_title">search title</string>
+    <string name="search">search</string>
 
 
 </resources>

@@ -1,22 +1,21 @@
 package com.example.gittest.controller.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskPagerActivity;
 import com.example.gittest.controller.activities.UserManageActivity;
 import com.example.gittest.model.User;
-import com.example.gittest.repositories.UserRepository;
+import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,7 +31,7 @@ public class LoginFragment extends Fragment {
     private EditText mEditTextPassword;
     private Button mButtonLogin;
     private Button mButtonSignUp;
-    private UserRepository mUserRepository;
+    private UserDBRepository mUserDBRepository;
 
 
     public LoginFragment() {
@@ -49,7 +48,7 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUserRepository = UserRepository.getInstance();
+        mUserDBRepository = UserDBRepository.getInstance(getActivity());
 
 
     }
@@ -76,32 +75,26 @@ public class LoginFragment extends Fragment {
     }
 
     private void setListeners() {
-        mButtonLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
-                    startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
-                } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
-                        && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
-                    startActivity(UserManageActivity.newIntent(getActivity()));
+        mButtonLogin.setOnClickListener(view -> {
+            if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
+                startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
+            } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
+                    && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
+                startActivity(UserManageActivity.newIntent(getActivity()));
 
-                } else {
-                    Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
-                }
+            } else {
+                Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
             }
         });
-        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SignUpDialogFragment signUpDialogFragment = SignUpDialogFragment.newInstance();
-                signUpDialogFragment.show(getFragmentManager(), SIGN_UP_DIALOG_FRAGMENT_TAG);
-            }
+        mButtonSignUp.setOnClickListener(view -> {
+            SignUpDialogFragment signUpDialogFragment = SignUpDialogFragment.newInstance();
+            signUpDialogFragment.show(getFragmentManager(), SIGN_UP_DIALOG_FRAGMENT_TAG);
         });
     }
 
 
     private boolean checkUserExist(String userName, String passWord) {
-        for (User user : mUserRepository.getList()) {
+        for (User user : mUserDBRepository.getList()) {
             if (user.getUserName().equals(userName) && user.getPassword().equals(passWord))
                 return true;
         }
