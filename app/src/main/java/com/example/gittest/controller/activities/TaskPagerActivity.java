@@ -170,6 +170,8 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
     public class TaskViewPagerAdapter extends FragmentStateAdapter {
 
+
+
         public TaskViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
