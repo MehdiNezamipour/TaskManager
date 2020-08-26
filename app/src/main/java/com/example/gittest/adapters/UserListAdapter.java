@@ -73,15 +73,13 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
             mTextViewUserIcon = itemView.findViewById(R.id.textView_user_icon);
             mImageButtonDelete = itemView.findViewById(R.id.imageButton_delete);
 
-<<<<<<<< HEAD:app/src/main/java/com/example/gittest/adapters/UserListAdapter.java
-========
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mContext.startActivity(TaskManageActivity.newIntent(mContext, mTextViewUserName.getText().toString()));
                 }
             });
->>>>>>>> develope:app/src/main/java/com/example/gittest/utils/adapters/UserListAdapter.java
         }
 
         public void bindUser(User user) {
