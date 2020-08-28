@@ -76,7 +76,7 @@ public class TaskManageFragment extends Fragment {
         if (mAdapter == null) {
             mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
         }
-        mAdapter.setTasks(TaskDBRepository.getInstance(getActivity()).getList(mUser));
+        mAdapter.setTasks(TaskDBRepository.getInstance(getActivity()).getList(mUser.getId()));
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }

@@ -148,12 +148,7 @@ public class SearchFragment extends Fragment {
         mButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String title = mEditTextSearchTitle.getText().toString();
-                String subject = mEditTextSearchSubject.getText().toString();
-                String date = mButtonSearchDate.getText().toString();
-                String time = mButtonSearchTime.getText().toString();
-                List<Task> tasks = new ArrayList<>(mTaskDBRepository.searchQuery(mUser, title, subject, date, time));
-                mAdapter.setTasks(tasks);
+                mAdapter.setTasks(mTaskDBRepository.search(mUser.getId(),mEditTextSearchTitle.getText().toString()));
                 mAdapter.notifyDataSetChanged();
             }
         });

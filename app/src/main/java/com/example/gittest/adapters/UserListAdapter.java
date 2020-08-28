@@ -91,7 +91,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
                     .setTitle(R.string.removeUser)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
                         mUserDBRepository.remove(user);
-                        mTaskDBRepository.removeAllUserTasks(user);
+                        mTaskDBRepository.removeAllUserTasks(user.getId());
                         setUsers(mUserDBRepository.getList());
                         notifyDataSetChanged();
 

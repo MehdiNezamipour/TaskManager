@@ -1,51 +1,71 @@
 package com.example.gittest.model;
 
 import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import androidx.annotation.RequiresApi;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
 import com.example.gittest.enums.State;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 
+@Entity(tableName = "taskTable")
 public class Task implements Serializable {
-
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
+    @ColumnInfo(name = "uuid")
     private UUID mTaskId;
-    private UUID mUserId;
+    @ColumnInfo(name = "userId")
+    private Long mUserId;
+    @ColumnInfo(name = "title")
     private String mTaskTitle;
+    @ColumnInfo(name = "subject")
     private String mTaskSubject;
+    @ColumnInfo(name = "state")
     private State mTaskState;
+    @ColumnInfo(name = "date")
     private String mDate;
+    @ColumnInfo(name = "time")
     private String mTime;
 
+
+    public Task() {
+
+    }
 
     public Task(User user) {
         mUserId = user.getId();
         mTaskId = UUID.randomUUID();
     }
 
-    public Task(UUID taskId, UUID userId, String taskTitle, String taskSubject, State taskState, String date, String time) {
-        mTaskId = taskId;
-        mUserId = userId;
-        mTaskTitle = taskTitle;
-        mTaskSubject = taskSubject;
-        mTaskState = taskState;
-        mDate = date;
-        mTime = time;
 
+    public Long getId() {
+        return id;
     }
+
 
     public UUID getTaskId() {
         return mTaskId;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTaskId(UUID taskId) {
+        mTaskId = taskId;
+    }
+
+    public void setUserId(Long userId) {
+        mUserId = userId;
+    }
 
     public String getTaskTitle() {
         return mTaskTitle;
@@ -88,7 +108,7 @@ public class Task implements Serializable {
     }
 
 
-    public UUID getUserId() {
+    public Long getUserId() {
         return mUserId;
     }
 
@@ -116,5 +136,39 @@ public class Task implements Serializable {
                 ", mDate='" + mDate + '\'' +
                 ", mTime='" + mTime + '\'' +
                 '}';
+    }
+
+    public static class UUIDConverter {
+
+        @TypeConverter
+        public String fromUUID(UUID value) {
+            return value.toString();
+        }
+
+        @TypeConverter
+        public UUID fromString(String value) {
+            return UUID.fromString(value);
+        }
+    }
+
+    public static class StateConverter {
+
+        @TypeConverter
+        public String fromState(State value) {
+            return value.toString();
+        }
+
+        @TypeConverter
+        public State formString(String value) {
+            switch (value) {
+                case "TODO":
+                    return State.TODO;
+                case "DOING":
+                    return State.DOING;
+                case "DONE":
+                    return State.DONE;
+            }
+            return null;
+        }
     }
 }

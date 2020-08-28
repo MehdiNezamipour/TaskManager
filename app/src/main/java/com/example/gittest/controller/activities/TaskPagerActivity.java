@@ -149,18 +149,18 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     private void notifyAllAdapter() {
 
         if (mTodoFragment.getAdapter() != null) {
-            mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser));
+            mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser.getId()));
             mTodoFragment.getAdapter().notifyDataSetChanged();
             mTodoFragment.changeVisibility();
         }
 
         if (mDoingFragment.getAdapter() != null) {
-            mDoingFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DOING, mUser));
+            mDoingFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DOING, mUser.getId()));
             mDoingFragment.getAdapter().notifyDataSetChanged();
             mDoingFragment.changeVisibility();
         }
         if (mDoneFragment.getAdapter() != null) {
-            mDoneFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DONE, mUser));
+            mDoneFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.DONE, mUser.getId()));
             mDoneFragment.getAdapter().notifyDataSetChanged();
             mDoneFragment.changeVisibility();
         }

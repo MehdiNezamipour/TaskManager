@@ -95,13 +95,13 @@ public class TaskListFragment extends Fragment {
         assert mState != null;
         switch (mState) {
             case TODO:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.TODO, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.TODO, mUser.getId());
                 break;
             case DOING:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.DOING, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.DOING, mUser.getId());
                 break;
             case DONE:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.DONE, mUser);
+                mTasks = mTaskDBRepository.getSpecialTaskList(State.DONE, mUser.getId());
                 break;
         }
 

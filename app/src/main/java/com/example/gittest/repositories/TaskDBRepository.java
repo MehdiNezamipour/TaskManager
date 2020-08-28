@@ -1,32 +1,30 @@
 package com.example.gittest.repositories;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.example.gittest.database.CursorWrapper.TaskCursorWrapper;
-import com.example.gittest.database.TaskDBSchema;
-import com.example.gittest.database.TaskManagerBaseHelper;
+import androidx.room.Room;
+
+import com.example.gittest.database.TaskManagerDataBase;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
-import com.example.gittest.model.User;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class TaskDBRepository implements IRepository<Task> {
+public class TaskDBRepository  {
 
 
-    private SQLiteDatabase mDatabase;
+    private TaskManagerDataBase mDatabase;
     private static Context sContext;
     private static TaskDBRepository sTaskRepository;
 
 
     private TaskDBRepository() {
-        TaskManagerBaseHelper taskManagerBaseHelper = new TaskManagerBaseHelper(sContext);
-        mDatabase = taskManagerBaseHelper.getWritableDatabase();
+        /*TaskManagerBaseHelper taskManagerBaseHelper = new TaskManagerBaseHelper(sContext);
+        mDatabase = taskManagerBaseHelper.getWritableDatabase();*/
+        mDatabase = Room.databaseBuilder(sContext, TaskManagerDataBase.class, "TaskDB.db")
+                .allowMainThreadQueries()
+                .build();
+
     }
 
     public static TaskDBRepository getInstance(Context context) {
@@ -36,10 +34,12 @@ public class TaskDBRepository implements IRepository<Task> {
         return sTaskRepository;
     }
 
-    public List<Task> getSpecialTaskList(State state, User user) {
-        List<Task> tasks = new ArrayList<>();
+    public List<Task> getSpecialTaskList(State state, Long userId) {
+        return mDatabase.taskDataBaseDAO().getSpecialTaskList(state, userId);
+
+       /* List<Task> tasks = new ArrayList<>();
         String selection = TaskDBSchema.TaskTable.COLS.USER_ID + " =?" + " AND " + TaskDBSchema.TaskTable.COLS.STATE + " =?";
-        String[] selectionArgs = new String[]{user.getId().toString(), state.toString()};
+        String[] selectionArgs = new String[]{user.getUUID().toString(), state.toString()};
         TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
 
         try {
@@ -51,13 +51,14 @@ public class TaskDBRepository implements IRepository<Task> {
         } finally {
             cursor.close();
         }
-        return tasks;
+        return tasks;*/
     }
 
-    public List<Task> getList(User user) {
-        List<Task> tasks = new ArrayList<>();
+    public List<Task> getList(Long userId) {
+        return mDatabase.taskDataBaseDAO().getUserTasks(userId);
+        /* List<Task> tasks = new ArrayList<>();
         String selection = TaskDBSchema.TaskTable.COLS.USER_ID + " =?";
-        String[] selectionArgs = new String[]{user.getId().toString()};
+        String[] selectionArgs = new String[]{user.getUUID().toString()};
         TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
 
         try {
@@ -69,10 +70,10 @@ public class TaskDBRepository implements IRepository<Task> {
         } finally {
             cursor.close();
         }
-        return tasks;
+        return tasks;*/
     }
 
-    private TaskCursorWrapper queryTasks(String selection, String[] selectionArgs) {
+    /*private TaskCursorWrapper queryTasks(String selection, String[] selectionArgs) {
         Cursor cursor = mDatabase.query(true, TaskDBSchema.TaskTable.NAME, null,
                 selection,
                 selectionArgs,
@@ -81,17 +82,20 @@ public class TaskDBRepository implements IRepository<Task> {
                 null,
                 null);
         return new TaskCursorWrapper(cursor);
+    }*/
+
+    public List<Task> search(Long userId, String searchString) {
+        return mDatabase.taskDataBaseDAO().searchQuery(userId, searchString);
     }
 
-
-    public List<Task> searchQuery(User user, String title, String subject, String date, String time) {
+   /* public List<Task> searchQuery(User user, String title, String subject, String date, String time) {
         List<Task> tasks = new ArrayList<>();
         StringBuilder selection = new StringBuilder();
         List<String> selectionArg = new ArrayList<>();
 
         if (user != null) {
             selection.append(TaskDBSchema.TaskTable.COLS.USER_ID + " = ? " + " AND ");
-            selectionArg.add(user.getId().toString());
+            selectionArg.add(user.getUUID().toString());
         }
         if (!title.equals("")) {
             selection.append(TaskDBSchema.TaskTable.COLS.TITLE + " LIKE ? " + " AND ");
@@ -125,17 +129,17 @@ public class TaskDBRepository implements IRepository<Task> {
         }
         return tasks;
     }
+*/
 
 
-    @Override
     public List<Task> getList() {
         return null;
     }
 
 
-    @Override
-    public Task get(UUID id) {
-        Task task = null;
+    public Task get(Long id) {
+        return mDatabase.taskDataBaseDAO().getTask(id);
+        /* Task task = null;
         String selection = TaskDBSchema.TaskTable.COLS.UUID + " =?";
         String[] selectionArgs = new String[]{id.toString()};
         TaskCursorWrapper cursor = queryTasks(selection, selectionArgs);
@@ -150,44 +154,48 @@ public class TaskDBRepository implements IRepository<Task> {
         } finally {
             cursor.close();
         }
-        return task;
+        return task;*/
     }
 
 
-    @Override
     public void add(Task task) {
-        ContentValues values = getTaskContentValue(task);
-        mDatabase.insert(TaskDBSchema.TaskTable.NAME, null, values);
+       mDatabase.taskDataBaseDAO().insertTask(task);
+        /* ContentValues values = getTaskContentValue(task);
+        mDatabase.insert(TaskDBSchema.TaskTable.NAME, null, values);*/
     }
 
-    @Override
+
     public void remove(Task task) {
-        String where = TaskDBSchema.TaskTable.COLS.UUID + " =?";
+
+        mDatabase.taskDataBaseDAO().deleteTask(task);
+        /* String where = TaskDBSchema.TaskTable.COLS.UUID + " =?";
         String[] whereArgs = new String[]{task.getTaskId().toString()};
-        mDatabase.delete(TaskDBSchema.TaskTable.NAME, where, whereArgs);
+        mDatabase.delete(TaskDBSchema.TaskTable.NAME, where, whereArgs);*/
     }
 
-    @Override
+
     public void removeAll() {
-        mDatabase.delete(TaskDBSchema.TaskTable.NAME, null, null);
+        mDatabase.taskDataBaseDAO().deleteTasks();
+        //mDatabase.delete(TaskDBSchema.TaskTable.NAME, null, null);
     }
 
-    public void removeAllUserTasks(User user) {
-        for (Task task : getList(user)) {
+    public void removeAllUserTasks(long userId) {
+        for (Task task : mDatabase.taskDataBaseDAO().getUserTasks(userId)) {
             remove(task);
         }
     }
 
-    @Override
+
     public void update(Task task) {
-        ContentValues contentValues = getTaskContentValue(task);
+       mDatabase.taskDataBaseDAO().updateTask(task);
+        /* ContentValues contentValues = getTaskContentValue(task);
         String where = TaskDBSchema.TaskTable.COLS.UUID + " =? ";
         String[] whereAgs = new String[]{task.getTaskId().toString()};
-        mDatabase.update(TaskDBSchema.TaskTable.NAME, contentValues, where, whereAgs);
+        mDatabase.update(TaskDBSchema.TaskTable.NAME, contentValues, where, whereAgs);*/
     }
 
 
-    private ContentValues getTaskContentValue(Task task) {
+ /*   private ContentValues getTaskContentValue(Task task) {
         ContentValues values = new ContentValues();
         values.put(TaskDBSchema.TaskTable.COLS.UUID, task.getTaskId().toString());
         values.put(TaskDBSchema.TaskTable.COLS.USER_ID, task.getUserId().toString());
@@ -198,7 +206,7 @@ public class TaskDBRepository implements IRepository<Task> {
         values.put(TaskDBSchema.TaskTable.COLS.TIME, task.getTime());
         return values;
 
-    }
+    }*/
 
 
 }
