@@ -77,6 +77,7 @@ public class SignUpDialogFragment extends DialogFragment {
 
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString(), role);
                             mUserDBRepository.add(user);
+                            Toast.makeText(getActivity(), R.string.successful_signup, Toast.LENGTH_SHORT).show();
                         }
 
                     }

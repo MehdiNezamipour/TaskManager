@@ -1,6 +1,7 @@
 package com.example.gittest.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,20 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskHo
                     EditTaskDialogFragment editTaskDialogFragment = EditTaskDialogFragment.newInstance(mUserName, task);
                     assert mFragment.getFragmentManager() != null;
                     editTaskDialogFragment.show(mFragment.getFragmentManager(), EDIT_TASK_DIALOG_FRAGMENT_TAG);
+                }
+            });
+            mMaterialCardView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, task.toString());
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, R.string.taskShareSubject);
+                    sendIntent.setType("text/plain");
+
+                    Intent shareIntent = Intent.createChooser(sendIntent, null);
+                    if (sendIntent.resolveActivity(mContext.getPackageManager()) != null)
+                        mContext.startActivity(shareIntent);
+                    return true;
                 }
             });
 

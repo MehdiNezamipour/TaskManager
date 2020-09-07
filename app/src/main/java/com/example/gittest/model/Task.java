@@ -128,13 +128,13 @@ public class Task implements Serializable {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "mTaskTitle='" + mTaskTitle + '\'' +
-                ", mTaskSubject='" + mTaskSubject + '\'' +
-                ", mTaskState=" + mTaskState +
-                ", mDate='" + mDate + '\'' +
-                ", mTime='" + mTime + '\'' +
-                '}';
+        return
+                "Title : " + mTaskTitle + "\n" +
+                        "Subject : " + mTaskSubject + "\n" +
+                        "Date : " + mDate + "\n" +
+                        "Time : " + mTime + "\n" +
+                        "TaskState : " + mTaskState;
+
     }
 
     public static class UUIDConverter {

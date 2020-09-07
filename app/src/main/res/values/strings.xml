@@ -35,6 +35,8 @@
     <string name="all_users">All users</string>
     <string name="userInfo">User Info</string>
     <string name="close">close</string>
+    <string name="taskShareSubject">Share Task</string>
+    <string name="successful_signup">successful signup</string>
 
 
 </resources>

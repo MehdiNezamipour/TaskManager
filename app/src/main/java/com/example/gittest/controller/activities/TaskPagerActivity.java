@@ -119,7 +119,8 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         if (mUser.getRole().equals(Role.ADMIN)) {
             menu.findItem(R.id.menu_item_all_users).setVisible(true);
             menu.findItem(R.id.remove_all_task_menu_item).setVisible(false);
-        }
+        } else
+            menu.findItem(R.id.menu_item_all_users).setVisible(false);
         return super.onPrepareOptionsMenu(menu);
 
     }
