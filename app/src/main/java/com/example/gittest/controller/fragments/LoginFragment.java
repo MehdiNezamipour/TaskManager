@@ -78,10 +78,6 @@ public class LoginFragment extends Fragment {
         mButtonLogin.setOnClickListener(view -> {
             if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
                 startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
-            } else if (mEditTextUserName.getText().toString().equalsIgnoreCase("admin")
-                    && mEditTextPassword.getText().toString().equalsIgnoreCase("admin")) {
-                startActivity(UserManageActivity.newIntent(getActivity()));
-
             } else {
                 Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
             }

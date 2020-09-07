@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.example.gittest.R;
+import com.example.gittest.enums.Role;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.UserDBRepository;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -28,6 +30,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private EditText mEditTextUserName;
     private EditText mEditTextPassword;
     private EditText mEditTextRepeatPassword;
+    private CheckBox mCheckBoxAdmin;
     private UserDBRepository mUserDBRepository;
 
 
@@ -65,7 +68,14 @@ public class SignUpDialogFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         if (true) {
-                            User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString());
+                            Role role;
+                            if (mCheckBoxAdmin.isChecked()) {
+                                role = Role.ADMIN;
+                            } else {
+                                role = Role.NORMAL;
+                            }
+
+                            User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString(), role);
                             mUserDBRepository.add(user);
                         }
 
@@ -106,6 +116,7 @@ public class SignUpDialogFragment extends DialogFragment {
         mEditTextUserName = view.findViewById(R.id.editText_signUp_userName);
         mEditTextPassword = view.findViewById(R.id.editText_signUp_password);
         mEditTextRepeatPassword = view.findViewById(R.id.editText_signUp_repeat_password);
+        mCheckBoxAdmin = view.findViewById(R.id.checkBox_signUp_as_admin);
     }
 
 }

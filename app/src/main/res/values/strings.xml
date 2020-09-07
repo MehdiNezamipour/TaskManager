@@ -31,6 +31,10 @@
     <string name="search_subject">search subject</string>
     <string name="search_title">search title</string>
     <string name="search">search</string>
+    <string name="signup_as_admin">Signup as Admin</string>
+    <string name="all_users">All users</string>
+    <string name="userInfo">User Info</string>
+    <string name="close">close</string>
 
 
 </resources>

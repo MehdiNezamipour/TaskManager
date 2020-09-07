@@ -101,7 +101,7 @@ public class EditTaskDialogFragment extends DialogFragment {
                 .setPositiveButton(R.string.save, (dialogInterface, i) -> {
                     setTaskFields(mTask);
                     mTaskDBRepository.update(mTask);
-                    mListener.onDismiss();
+                    mListener.onListChanged();
 
                 })
                 .setNegativeButton(R.string.edit, (dialogInterface, i) -> {
@@ -110,7 +110,7 @@ public class EditTaskDialogFragment extends DialogFragment {
                 .setNeutralButton(R.string.remove, (dialogInterface, i) -> {
                     mTaskDBRepository.remove(mTask);
                     //mUser.removeTask(mTask);
-                    mListener.onDismiss();
+                    mListener.onListChanged();
                     dismiss();
                 }).create();
 

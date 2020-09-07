@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 
 import com.example.gittest.enums.Role;
+import com.example.gittest.enums.State;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,15 +28,17 @@ public class User implements Serializable {
     private UUID mUUID;
     @ColumnInfo(name = "date")
     private Date mDate;
-    @Ignore
+    @ColumnInfo(name = "role")
     private Role mRole;
 
-    public User(String userName, String password) {
+    public User(String userName, String password, Role role) {
         //mTasks = new ArrayList<>();
         mUserName = userName;
         mPassword = password;
+        mRole = role;
         mUUID = UUID.randomUUID();
         mDate = new Date();
+
     }
 
     public void setUUID(UUID UUID) {
@@ -119,6 +122,25 @@ public class User implements Serializable {
         @TypeConverter
         public Date fromLong(Long value) {
             return new Date(value);
+        }
+    }
+
+    public static class RoleConverter {
+
+        @TypeConverter
+        public String convertRoleToString(Role value) {
+            return value.toString();
+        }
+
+        @TypeConverter
+        public Role formString(String value) {
+            switch (value) {
+                case "ADMIN":
+                    return Role.ADMIN;
+                case "NORMAL":
+                    return Role.NORMAL;
+            }
+            return null;
         }
     }
 

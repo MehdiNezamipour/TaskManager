@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
 import com.example.gittest.adapters.TaskListAdapter;
+import com.example.gittest.enums.Role;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
@@ -93,19 +94,21 @@ public class TaskListFragment extends Fragment {
         }
 
         assert mState != null;
-        switch (mState) {
-            case TODO:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.TODO, mUser.getId());
-                break;
-            case DOING:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.DOING, mUser.getId());
-                break;
-            case DONE:
-                mTasks = mTaskDBRepository.getSpecialTaskList(State.DONE, mUser.getId());
-                break;
+        if (mUser.getRole() == Role.NORMAL) {
+            switch (mState) {
+                case TODO:
+                    mTasks = mTaskDBRepository.getSpecialTaskList(State.TODO, mUser.getId());
+                    break;
+                case DOING:
+                    mTasks = mTaskDBRepository.getSpecialTaskList(State.DOING, mUser.getId());
+                    break;
+                case DONE:
+                    mTasks = mTaskDBRepository.getSpecialTaskList(State.DONE, mUser.getId());
+                    break;
+            }
+        } else {
+            mTasks = mTaskDBRepository.getList(mState);
         }
-
-
     }
 
 
@@ -117,13 +120,7 @@ public class TaskListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        if (mAdapter == null) {
-            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
-        }
-
         return inflater.inflate(R.layout.fragment_task_list, container, false);
-
     }
 
     @Override
@@ -135,6 +132,10 @@ public class TaskListFragment extends Fragment {
         } else if (getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             mTaskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }
+        if (mAdapter == null) {
+            mAdapter = new TaskListAdapter(getActivity(), this, mUserName);
+        }
+        mTaskRecyclerView.setAdapter(mAdapter);
         updateAdapter();
     }
 
@@ -147,9 +148,7 @@ public class TaskListFragment extends Fragment {
 
 
     private void updateAdapter() {
-
         mAdapter.setTasks(mTasks);
-        mTaskRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
         changeVisibility();
     }

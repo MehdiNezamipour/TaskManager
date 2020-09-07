@@ -29,7 +29,7 @@ public class TaskManageActivity extends SingleFragmentActivity implements AddTas
 
 
     @Override
-    public void onDismiss() {
+    public void onListChanged() {
         mFragment.getAdapter().notifyDataSetChanged();
     }
 }

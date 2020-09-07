@@ -10,6 +10,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.ActionMenuItem;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -18,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.gittest.R;
 import com.example.gittest.controller.fragments.AddTaskDialogFragment;
 import com.example.gittest.controller.fragments.TaskListFragment;
+import com.example.gittest.enums.Role;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
@@ -63,14 +65,18 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         mUserDBRepository = UserDBRepository.getInstance(this);
         mTaskDBRepository = TaskDBRepository.getInstance(this);
         mUser = mUserDBRepository.get(mUserName);
-        mTodoFragment = TaskListFragment.newInstance(State.TODO, mUserName);
-        mDoingFragment = TaskListFragment.newInstance(State.DOING, mUserName);
-        mDoneFragment = TaskListFragment.newInstance(State.DONE, mUserName);
+
+        initFragments();
 
 
         setContentView(R.layout.activity_task_pager);
         findViews();
+
+        if (mUser.getRole() == Role.ADMIN)
+            mFloatingActionButton.setVisibility(View.GONE);
+
         FragmentStateAdapter adapter = new TaskViewPagerAdapter(this);
+        mViewPager2.setOffscreenPageLimit(2);
         mViewPager2.setAdapter(adapter);
         new TabLayoutMediator(mTabLayout, mViewPager2, new TabLayoutMediator.TabConfigurationStrategy() {
             @Override
@@ -86,6 +92,15 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         setListeners();
     }
 
+    private void initFragments() {
+        if (mTodoFragment == null)
+            mTodoFragment = TaskListFragment.newInstance(State.TODO, mUserName);
+        if (mDoingFragment == null)
+            mDoingFragment = TaskListFragment.newInstance(State.DOING, mUserName);
+        if (mDoneFragment == null)
+            mDoneFragment = TaskListFragment.newInstance(State.DONE, mUserName);
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -97,6 +112,16 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.pager_activity_menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (mUser.getRole().equals(Role.ADMIN)) {
+            menu.findItem(R.id.menu_item_all_users).setVisible(true);
+            menu.findItem(R.id.remove_all_task_menu_item).setVisible(false);
+        }
+        return super.onPrepareOptionsMenu(menu);
+
     }
 
     @Override
@@ -120,6 +145,9 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                 startActivity(SearchActivity.newIntent(this, mUserName));
                 return true;
 
+            case R.id.menu_item_all_users:
+                startActivity(UserManageActivity.newIntent(this));
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -142,12 +170,11 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
 
 
     @Override
-    public void onDismiss() {
+    public void onListChanged() {
         notifyAllAdapter();
     }
 
     private void notifyAllAdapter() {
-
         if (mTodoFragment.getAdapter() != null) {
             mTodoFragment.getAdapter().setTasks(mTaskDBRepository.getSpecialTaskList(State.TODO, mUser.getId()));
             mTodoFragment.getAdapter().notifyDataSetChanged();
@@ -167,9 +194,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
     }
 
 
-
     public class TaskViewPagerAdapter extends FragmentStateAdapter {
-
 
 
         public TaskViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

@@ -62,7 +62,7 @@ public class UserManageFragment extends Fragment {
 
     private void updateUi() {
         if (mAdapter == null)
-            mAdapter = new UserListAdapter(getActivity());
+            mAdapter = new UserListAdapter(getActivity(), getFragmentManager());
         mAdapter.setUsers(mUserRepository.getList());
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();

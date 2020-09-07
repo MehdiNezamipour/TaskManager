@@ -52,7 +52,7 @@ public class AddTaskDialogFragment extends DialogFragment {
 
 
     public interface OnAddDialogDismissListener {
-        void onDismiss();
+        void onListChanged();
     }
 
     public AddTaskDialogFragment() {
@@ -118,7 +118,7 @@ public class AddTaskDialogFragment extends DialogFragment {
                         mTask = new Task(mUser);
                         setTaskFields(mTask);
                         mTaskDBRepository.add(mTask);
-                        mListener.onDismiss();
+                        mListener.onListChanged();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)

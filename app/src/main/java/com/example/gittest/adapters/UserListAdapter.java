@@ -9,10 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
 import com.example.gittest.controller.activities.TaskManageActivity;
+import com.example.gittest.controller.fragments.UserDetailFragment;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
 import com.example.gittest.repositories.UserDBRepository;
@@ -22,14 +24,17 @@ import java.util.List;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHolder> {
 
+    public static final String USER_DETAIL_FRAGMENT_TAG = "userDetailFragment";
     private List<User> mUsers;
     private Context mContext;
     private TaskDBRepository mTaskDBRepository;
     private UserDBRepository mUserDBRepository;
+    private FragmentManager mFragmentManager;
 
 
-    public UserListAdapter(Context context) {
+    public UserListAdapter(Context context, FragmentManager fragmentManager) {
         mContext = context;
+        mFragmentManager = fragmentManager;
         mTaskDBRepository = TaskDBRepository.getInstance(mContext);
         mUserDBRepository = UserDBRepository.getInstance(mContext);
     }
@@ -59,7 +64,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
     public class UserHolder extends RecyclerView.ViewHolder {
         private CardView mCardViewUserContainer;
         private TextView mTextViewUserName;
-        private TextView mTextViewSignUpDate;
+        private TextView mTextViewRole;
         private ImageButton mImageButtonDelete;
         private TextView mTextViewUserIcon;
 
@@ -69,24 +74,25 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserHo
 
             mCardViewUserContainer = itemView.findViewById(R.id.cardView_user_container);
             mTextViewUserName = itemView.findViewById(R.id.textView_userName);
-            mTextViewSignUpDate = itemView.findViewById(R.id.textView_signUp_date);
+            mTextViewRole = itemView.findViewById(R.id.textView_role);
             mTextViewUserIcon = itemView.findViewById(R.id.textView_user_icon);
             mImageButtonDelete = itemView.findViewById(R.id.imageButton_delete);
 
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mContext.startActivity(TaskManageActivity.newIntent(mContext, mTextViewUserName.getText().toString()));
-                }
-            });
         }
 
         public void bindUser(User user) {
             mTextViewUserName.setText(user.getUserName());
-            mTextViewSignUpDate.setText(user.getDate().toString());
+            mTextViewRole.setText(String.format("Role : %s", user.getRole().toString()));
 
-            mCardViewUserContainer.setOnClickListener(view -> mContext.startActivity(TaskManageActivity.newIntent(mContext, mTextViewUserName.getText().toString())));
+
+            mCardViewUserContainer.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UserDetailFragment userDetailFragment = UserDetailFragment.newInstance(user);
+                    userDetailFragment.show(mFragmentManager, USER_DETAIL_FRAGMENT_TAG);
+                }
+            });
             mImageButtonDelete.setOnClickListener(view -> new MaterialAlertDialogBuilder(mContext)
                     .setTitle(R.string.removeUser)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {

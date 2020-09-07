@@ -37,7 +37,6 @@ public class Task implements Serializable {
 
 
     public Task() {
-
     }
 
     public Task(User user) {

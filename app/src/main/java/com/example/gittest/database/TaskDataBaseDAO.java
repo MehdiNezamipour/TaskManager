@@ -29,17 +29,18 @@ public interface TaskDataBaseDAO {
     @Query("SELECT * FROM taskTable")
     List<Task> getTasks();
 
-    @Query("SELECT * FROM taskTable WHERE id=:userId")
+    @Query("SELECT * FROM taskTable WHERE userId=:userId")
     List<Task> getUserTasks(Long userId);
 
     @Query("SELECT * FROM taskTable WHERE state =:state AND userId=:userId")
     List<Task> getSpecialTaskList(State state, Long userId);
 
-    @Query("SELECT * FROM taskTable WHERE userId=:userId AND title LIKE :searchString OR subject LIKE :searchString")
+    @Query("SELECT * FROM taskTable WHERE userId=:userId AND title LIKE +'%'+:searchString+'%' OR subject LIKE +'%'+:searchString+'%'")
     List<Task> searchQuery(Long userId, String searchString);
 
     @Query("DELETE FROM taskTable")
     void deleteTasks();
 
-
+    @Query("SELECT * FROM taskTable WHERE state=:state")
+    List<Task> getList(State state);
 }
