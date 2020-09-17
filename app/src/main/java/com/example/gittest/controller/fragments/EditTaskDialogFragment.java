@@ -3,17 +3,27 @@ package com.example.gittest.controller.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -23,11 +33,17 @@ import com.example.gittest.model.Task;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
 import com.example.gittest.repositories.UserDBRepository;
+import com.example.gittest.utils.PictureUtil;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.io.File;
+import java.util.List;
 
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.ARG_TASK;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.DATE_PICKER_DIALOG_FRAGMENT_TAG;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_DATE_PICKER;
+import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_PICK_PHOTO;
+import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_TAKE_PICTURE;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.REQUEST_CODE_TIME_PICKER;
 import static com.example.gittest.controller.fragments.AddTaskDialogFragment.TIME_PICKER_DIALOG_FRAGMENT_TAG;
 import static com.example.gittest.controller.fragments.TaskListFragment.ARG_USER_NAME;
@@ -39,16 +55,21 @@ import static com.example.gittest.controller.fragments.TaskListFragment.ARG_USER
  */
 public class EditTaskDialogFragment extends DialogFragment {
 
+    private static final String FILEPROVIDER_AUTHORITY = "com.example.gittest.fileprovider";
     private EditText mEditTextTaskTitle;
     private EditText mEditTextTaskSubject;
     private Button mButtonDatePicker;
     private Button mButtonTimePicker;
     private RadioGroup mRadioGroupTaskState;
+    private ImageView mImageViewPhoto;
+    private ImageButton mImageButtonTakePhoto;
+
     private UserDBRepository mUserDBRepository;
     private TaskDBRepository mTaskDBRepository;
     private User mUser;
     private AddTaskDialogFragment.OnAddDialogDismissListener mListener;
     private Task mTask;
+    private File mPhotoFile;
 
     public EditTaskDialogFragment() {
         // Required empty public constructor
@@ -72,6 +93,8 @@ public class EditTaskDialogFragment extends DialogFragment {
             mUser = mUserDBRepository.get(getArguments().getString(ARG_USER_NAME));
             mTask = (Task) getArguments().getSerializable(ARG_TASK);
         }
+
+        mPhotoFile = mTask.getPhotoFile(getActivity(), mTask);
     }
 
     @Override
@@ -92,9 +115,9 @@ public class EditTaskDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_add_task_dialog, null);
         findViews(view);
         setListeners();
-
         setEnable(false);
         initUi();
+
         AlertDialog alertDialog = new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.editTask)
                 .setView(view)
@@ -108,8 +131,7 @@ public class EditTaskDialogFragment extends DialogFragment {
 
                 })
                 .setNeutralButton(R.string.remove, (dialogInterface, i) -> {
-                    mTaskDBRepository.remove(mTask);
-                    //mUser.removeTask(mTask);
+                    mTaskDBRepository.delete(mTask);
                     mListener.onListChanged();
                     dismiss();
                 }).create();
@@ -136,7 +158,50 @@ public class EditTaskDialogFragment extends DialogFragment {
             mButtonDatePicker.setText(data.getStringExtra(DatePickerDialogFragment.EXTRA_USER_SELECTED_DATE));
         } else if (requestCode == REQUEST_CODE_TIME_PICKER) {
             mButtonTimePicker.setText(data.getStringExtra(TimePickerDialogFragment.EXTRA_USER_SELECTED_TIME));
+        } else if (requestCode == REQUEST_CODE_TAKE_PICTURE) {
+            updatePhotoView();
+            Uri photoUri = FileProvider.getUriForFile(
+                    getActivity(),
+                    FILEPROVIDER_AUTHORITY,
+                    mPhotoFile);
+            getActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+        } else if (requestCode == REQUEST_CODE_PICK_PHOTO) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            if (selectedImage != null) {
+                Cursor cursor = getActivity().getContentResolver().query(
+                        selectedImage,
+                        filePathColumn,
+                        null,
+                        null,
+                        null);
+                if (cursor != null) {
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex);
+                    if (picturePath != null) {
+                        Bitmap bitmap = PictureUtil.getScaledBitmap(picturePath, getActivity());
+                        mImageViewPhoto.setImageBitmap(bitmap);
+                        mTask.setPhotoPath(picturePath);
+                    } else
+                        mImageViewPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_task));
+                    cursor.close();
+                }
+            }
         }
+    }
+
+    private void updatePhotoView() {
+        Bitmap bitmap = PictureUtil.getScaledBitmap(mPhotoFile.getPath(), getActivity());
+        if (mTask.getPhotoPath() != null) {
+            mImageViewPhoto.setImageBitmap(PictureUtil.getScaledBitmap(mTask.getPhotoPath(), getActivity()));
+        }
+        if (bitmap == null) {
+            mImageViewPhoto.setImageDrawable(getResources().getDrawable(R.drawable.ic_task));
+        } else
+            mImageViewPhoto.setImageBitmap(bitmap);
     }
 
 
@@ -146,6 +211,9 @@ public class EditTaskDialogFragment extends DialogFragment {
         mButtonDatePicker = view.findViewById(R.id.button_datePicker);
         mButtonTimePicker = view.findViewById(R.id.button_timePicker);
         mRadioGroupTaskState = view.findViewById(R.id.radioGroup_task_state);
+        mImageViewPhoto = view.findViewById(R.id.imageView_task_image);
+        mImageButtonTakePhoto = view.findViewById(R.id.imageButton_take_image);
+
     }
 
     private void initUi() {
@@ -166,6 +234,7 @@ public class EditTaskDialogFragment extends DialogFragment {
             default:
                 break;
         }
+        updatePhotoView();
     }
 
     private void setListeners() {
@@ -177,13 +246,18 @@ public class EditTaskDialogFragment extends DialogFragment {
                 datePickerDialogFragment.show(getFragmentManager(), DATE_PICKER_DIALOG_FRAGMENT_TAG);
             }
         });
-
         mButtonTimePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TimePickerDialogFragment timePickerDialogFragment = TimePickerDialogFragment.newInstance();
                 timePickerDialogFragment.setTargetFragment(EditTaskDialogFragment.this, REQUEST_CODE_TIME_PICKER);
                 timePickerDialogFragment.show(getFragmentManager(), TIME_PICKER_DIALOG_FRAGMENT_TAG);
+            }
+        });
+        mImageButtonTakePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage(getActivity());
             }
         });
     }
@@ -217,5 +291,57 @@ public class EditTaskDialogFragment extends DialogFragment {
         for (int i = 0; i < mRadioGroupTaskState.getChildCount(); i++) {
             mRadioGroupTaskState.getChildAt(i).setEnabled(b);
         }
+        mImageButtonTakePhoto.setEnabled(b);
     }
+
+    private void selectImage(Context context) {
+        final CharSequence[] options = {"Take Photo", "Choose from Gallery", "Cancel"};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setTitle("Choose your task picture");
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (options[item].equals("Take Photo")) {
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        if (mPhotoFile == null)
+                            return;
+
+                        Uri photoURI = FileProvider.getUriForFile(
+                                getActivity(),
+                                FILEPROVIDER_AUTHORITY,
+                                mPhotoFile);
+
+                        grantTemPermissionForTakePicture(takePictureIntent, photoURI);
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        startActivityForResult(takePictureIntent, REQUEST_CODE_TAKE_PICTURE);
+                    }
+
+                } else if (options[item].equals("Choose from Gallery")) {
+                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(pickPhoto, REQUEST_CODE_PICK_PHOTO);
+
+                } else if (options[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    private void grantTemPermissionForTakePicture(Intent takePictureIntent, Uri photoURI) {
+        PackageManager packageManager = getActivity().getPackageManager();
+        List<ResolveInfo> activities = packageManager.queryIntentActivities(
+                takePictureIntent,
+                PackageManager.MATCH_DEFAULT_ONLY);
+
+        for (ResolveInfo activity : activities) {
+            getActivity().grantUriPermission(activity.activityInfo.packageName,
+                    photoURI,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+    }
+
+
 }

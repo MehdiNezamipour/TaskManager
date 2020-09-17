@@ -64,14 +64,6 @@ public class LoginFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         setListeners();
-        //init ui for fast test app
-        initUi();
-
-    }
-
-    private void initUi() {
-        mEditTextUserName.setText("a");
-        mEditTextPassword.setText("1");
     }
 
     private void setListeners() {
@@ -79,7 +71,7 @@ public class LoginFragment extends Fragment {
             if (checkUserExist(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString())) {
                 startActivity(TaskPagerActivity.newIntent(getActivity(), mEditTextUserName.getText().toString()));
             } else {
-                Snackbar.make(getView(), "Incorrect username or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+                Snackbar.make(getView(), "Incorrect userName or password", BaseTransientBottomBar.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
             }
         });
         mButtonSignUp.setOnClickListener(view -> {

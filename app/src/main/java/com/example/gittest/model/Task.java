@@ -1,17 +1,17 @@
 package com.example.gittest.model;
 
+import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
-import androidx.room.TypeConverters;
 
 import com.example.gittest.enums.State;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -34,6 +34,8 @@ public class Task implements Serializable {
     private String mDate;
     @ColumnInfo(name = "time")
     private String mTime;
+    @ColumnInfo(name = "photoPath")
+    private String mPhotoPath;
 
 
     public Task() {
@@ -44,14 +46,12 @@ public class Task implements Serializable {
         mTaskId = UUID.randomUUID();
     }
 
+    public UUID getTaskId() {
+        return mTaskId;
+    }
 
     public Long getId() {
         return id;
-    }
-
-
-    public UUID getTaskId() {
-        return mTaskId;
     }
 
     public void setId(Long id) {
@@ -106,9 +106,26 @@ public class Task implements Serializable {
         mTime = time;
     }
 
-
     public Long getUserId() {
         return mUserId;
+    }
+
+
+    public String getPhotoPath() {
+        return mPhotoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        mPhotoPath = photoPath;
+    }
+
+    public String getPhotoFileName() {
+        return "IMG_" + getTaskId() + ".jpg";
+    }
+
+    public File getPhotoFile(Context context, Task task) {
+        File photoFile = new File(context.getFilesDir(), task.getPhotoFileName());
+        return photoFile;
     }
 
 
@@ -136,6 +153,7 @@ public class Task implements Serializable {
                         "TaskState : " + mTaskState;
 
     }
+
 
     public static class UUIDConverter {
 

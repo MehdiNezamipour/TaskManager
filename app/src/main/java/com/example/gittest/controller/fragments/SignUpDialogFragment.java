@@ -58,23 +58,19 @@ public class SignUpDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_sign_up, null);
         findViews(view);
 
-        //init ui for fast test
-        initUi();
-
         return new MaterialAlertDialogBuilder(getActivity())
                 .setTitle(R.string.sign_up)
                 .setView(view)
                 .setPositiveButton(R.string.sign_up, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (true) {
+                        if (checkInputs()) {
                             Role role;
                             if (mCheckBoxAdmin.isChecked()) {
                                 role = Role.ADMIN;
                             } else {
                                 role = Role.NORMAL;
                             }
-
                             User user = new User(mEditTextUserName.getText().toString(), mEditTextPassword.getText().toString(), role);
                             mUserDBRepository.add(user);
                             Toast.makeText(getActivity(), R.string.successful_signup, Toast.LENGTH_SHORT).show();
@@ -87,19 +83,17 @@ public class SignUpDialogFragment extends DialogFragment {
 
     }
 
-    private void initUi() {
-        mEditTextUserName.setText("a");
-        mEditTextPassword.setText("1");
-        mEditTextRepeatPassword.setText("1");
-    }
 
     private boolean checkInputs() {
-        if (checkUserNameExist(mEditTextUserName.getText().toString())
-                || mEditTextUserName.getText().toString().trim().length() == 0
-                || mEditTextPassword.getText().toString().trim().length() < 8
-                || !mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())
-                || mEditTextUserName.getText().toString().equalsIgnoreCase("admin")) {
-            Toast.makeText(getActivity(), "Wrong Inputs", Toast.LENGTH_SHORT).show();
+        if (mEditTextUserName.getText().toString().trim().length() == 0
+                || mEditTextPassword.getText().toString().trim().length() == 0) {
+            Toast.makeText(getActivity(), "Empty username or password !", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (checkUserNameExist(mEditTextUserName.getText().toString())) {
+            Toast.makeText(getActivity(), "This username is Exist !", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!mEditTextPassword.getText().toString().trim().equals(mEditTextRepeatPassword.getText().toString().trim())) {
+            Toast.makeText(getActivity(), "passwords not same", Toast.LENGTH_SHORT).show();
             return false;
         } else
             return true;
@@ -107,16 +101,17 @@ public class SignUpDialogFragment extends DialogFragment {
 
     private boolean checkUserNameExist(String userName) {
         for (User user : mUserDBRepository.getList()) {
-            if (user.getUserName().equals(userName))
-                return false;
+            if (user.getUserName().equals(userName)) {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     private void findViews(View view) {
-        mEditTextUserName = view.findViewById(R.id.editText_signUp_userName);
-        mEditTextPassword = view.findViewById(R.id.editText_signUp_password);
-        mEditTextRepeatPassword = view.findViewById(R.id.editText_signUp_repeat_password);
+        mEditTextUserName = view.findViewById(R.id.editText_singUp_username);
+        mEditTextPassword = view.findViewById(R.id.editText_singUp_password);
+        mEditTextRepeatPassword = view.findViewById(R.id.editText_singUp_repeat_password);
         mCheckBoxAdmin = view.findViewById(R.id.checkBox_signUp_as_admin);
     }
 

@@ -1,63 +1,83 @@
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
 
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:focusable="true"
-    android:gravity="center"
-    android:orientation="vertical"
     android:padding="8dp"
-    tools:context="com.example.gittest.controller.fragments.AddTaskDialogFragment">
+    tools:context="com.example.gittest.controller.fragments.AddTaskDialogFragment"
+
+    >
 
     <EditText
         android:id="@+id/editText_task_title"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:ems="12"
-        android:hint="@string/title" />
+        android:hint="@string/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_task_image"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editText_task_subject"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="12"
         android:hint="@string/subject"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="@+id/imageButton_take_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView_task_image"
+        app:layout_constraintTop_toBottomOf="@+id/editText_task_title" />
+
 
     <Button
         android:id="@+id/button_datePicker"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        />
+        app:layout_constraintEnd_toEndOf="@+id/button_timePicker"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/button_timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/editText_task_subject" />
 
     <Button
         android:id="@+id/button_timePicker"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_datePicker" />
+
 
     <RadioGroup
         android:id="@+id/radioGroup_task_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/button_timePicker"
+        app:layout_constraintStart_toStartOf="@+id/button_timePicker"
+        app:layout_constraintTop_toBottomOf="@id/button_timePicker">
 
         <RadioButton
             android:id="@+id/radioButton_task_todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/TODO" />
+            android:text="@string/TODO"
+            tools:layout_editor_absoluteX="38dp"
+            tools:layout_editor_absoluteY="227dp" />
 
         <RadioButton
             android:id="@+id/radioButton_task_doing"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:text="@string/DOING"
 
             />
@@ -66,11 +86,32 @@
             android:id="@+id/radioButton_task_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/DONE"
-
-            />
-
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/DONE" />
     </RadioGroup>
 
+    <ImageView
+        android:id="@+id/imageView_task_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/editText_task_title"
+        app:layout_constraintEnd_toStartOf="@+id/editText_task_title"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editText_task_title"
+        app:layout_constraintVertical_bias="0.0" />
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/imageButton_take_image"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:src="@android:drawable/ic_menu_camera"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_task_image"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView_task_image"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_task_image" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

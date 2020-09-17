@@ -8,6 +8,7 @@ import com.example.gittest.database.TaskManagerDataBase;
 import com.example.gittest.enums.State;
 import com.example.gittest.model.Task;
 
+import java.io.File;
 import java.util.List;
 
 public class TaskDBRepository {
@@ -60,23 +61,23 @@ public class TaskDBRepository {
     }
 
 
-    public void add(Task task) {
+    public void insert(Task task) {
         mDatabase.taskDataBaseDAO().insertTask(task);
     }
 
 
-    public void remove(Task task) {
+    public void delete(Task task) {
         mDatabase.taskDataBaseDAO().deleteTask(task);
     }
 
 
-    public void removeAll() {
+    public void deleteAll() {
         mDatabase.taskDataBaseDAO().deleteTasks();
     }
 
     public void removeAllUserTasks(long userId) {
         for (Task task : mDatabase.taskDataBaseDAO().getUserTasks(userId)) {
-            remove(task);
+            delete(task);
         }
     }
 
@@ -84,6 +85,8 @@ public class TaskDBRepository {
     public void update(Task task) {
         mDatabase.taskDataBaseDAO().updateTask(task);
     }
+
+
 
 
 }

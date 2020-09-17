@@ -2,6 +2,9 @@ package com.example.gittest.controller.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,7 +13,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.ActionMenuItem;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
@@ -92,6 +94,12 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         setListeners();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notifyAllAdapter();
+    }
+
     private void initFragments() {
         if (mTodoFragment == null)
             mTodoFragment = TaskListFragment.newInstance(State.TODO, mUserName);
@@ -135,7 +143,7 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
                 new MaterialAlertDialogBuilder(this)
                         .setMessage(R.string.sureAlertMessage)
                         .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                            mTaskDBRepository.removeAll();
+                            mTaskDBRepository.deleteAll();
                             notifyAllAdapter();
                         })
                         .setNeutralButton(android.R.string.cancel, null)
@@ -167,6 +175,10 @@ public class TaskPagerActivity extends AppCompatActivity implements AddTaskDialo
         mFloatingActionButton = findViewById(R.id.fab);
         mViewPager2 = findViewById(R.id.viewPager2);
         mTabLayout = findViewById(R.id.tabLayout);
+        Drawable myFabSrc = getResources().getDrawable(R.drawable.ic_add_white);
+        Drawable willBeWhite = myFabSrc.getConstantState().newDrawable();
+        willBeWhite.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        mFloatingActionButton.setImageDrawable(willBeWhite);
     }
 
 

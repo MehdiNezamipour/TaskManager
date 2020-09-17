@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.gittest.R;
-import com.example.gittest.controller.activities.TaskManageActivity;
 import com.example.gittest.controller.fragments.UserDetailFragment;
 import com.example.gittest.model.User;
 import com.example.gittest.repositories.TaskDBRepository;
