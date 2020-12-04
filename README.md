@@ -5,7 +5,7 @@ Simple Task Manager App for Manage our Task over Days and months to be more flex
 
 | Login View | Main View | Add Task View |
 |--|--|--|
-|<img src="https://drive.google.com/file/d/1XbJ2vBiZ8k1YVrd5O0JxgjrWepY1eUxI/view?usp=sharing" width=250px>|<img src="https://drive.google.com/file/d/1gN0Nuqnmi_iZlO__7vUDFL0GuxUyCHRY/view?usp=sharing" width=250px> | <img src="https://drive.google.com/file/d/1h1mYtPGpYSo3pXkhsnpaN05P__7KyaPL/view?usp=sharing" width=250px> |
+|<img src="https://8pic.ir/uploads/Login.jpg" width=250px>|<img src="https://8pic.ir/uploads/Main.jpg" width=250px> | <img src="https://8pic.ir/uploads/Add.jpg" width=250px> |
 
 
 
